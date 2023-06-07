@@ -1,9 +1,7 @@
 --> 0 HEAD
 <-- 0|HEAD|Y
---> 1 NOTE www.github.com/scolicodes/CS-555-Project
-<-- 1|NOTE|Y|www.github.com/scolicodes/CS-555-Project
---> 0 NOTE Ronnie Arvanites
-<-- 0|NOTE|Y|Ronnie Arvanites
+--> 0 NOTE www.github.com/scolicodes/CS-555-Project
+<-- 0|NOTE|Y|www.github.com/scolicodes/CS-555-Project
 --> 1 SOUR Family Echo
 <-- 1|SOUR|N|Family Echo
 --> 2 WWW http://www.familyecho.com/
