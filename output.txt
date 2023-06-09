@@ -8,8 +8,8 @@
 <-- 2|WWW|N|http://www.familyecho.com/
 --> 1 FILE My Family
 <-- 1|FILE|N|My Family
---> 1 DATE 23 MAY 2023
-<-- 1|DATE|Y|23 MAY 2023
+--> 1 DATE 8 JUN 2023
+<-- 1|DATE|Y|8 JUN 2023
 --> 1 DEST ANSTFILE
 <-- 1|DEST|N|ANSTFILE
 --> 1 GEDC
@@ -20,8 +20,8 @@
 <-- 2|FORM|N|LINEAGE-LINKED
 --> 1 SUBM @I1@
 <-- 1|SUBM|N|@I1@
---> 2 NAME Ronnie Arvanites
-<-- 2|NAME|Y|Ronnie Arvanites
+--> 2 NAME Ronnie Aravanites
+<-- 2|NAME|Y|Ronnie Aravanites
 --> 1 SUBN
 <-- 1|SUBN|N
 --> 1 CHAR UTF-8
@@ -156,6 +156,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 5 FEB 1951
 <-- 2|DATE|Y|5 FEB 1951
+--> 1 FAMS @F10@
+<-- 1|FAMS|Y|@F10@
 --> 1 FAMC @F1@
 <-- 1|FAMC|Y|@F1@
 --> 0 @I7@ INDI
@@ -180,8 +182,8 @@
 <-- 2|DATE|Y|25 MAY 2020
 --> 1 FAMS @F3@
 <-- 1|FAMS|Y|@F3@
---> 1 FAMC @F10@
-<-- 1|FAMC|Y|@F10@
+--> 1 FAMC @F11@
+<-- 1|FAMC|Y|@F11@
 --> 0 @I8@ INDI
 <-- 0|INDI|Y|@I8@
 --> 1 NAME Allison /Gill/
@@ -234,8 +236,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 16 SEP 1975
 <-- 2|DATE|Y|16 SEP 1975
---> 1 FAMS @F11@
-<-- 1|FAMS|Y|@F11@
+--> 1 FAMS @F12@
+<-- 1|FAMS|Y|@F12@
 --> 1 FAMC @F3@
 <-- 1|FAMC|Y|@F3@
 --> 0 @I11@ INDI
@@ -254,8 +256,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 8 NOV 1977
 <-- 2|DATE|Y|8 NOV 1977
---> 1 FAMS @F12@
-<-- 1|FAMS|Y|@F12@
+--> 1 FAMS @F13@
+<-- 1|FAMS|Y|@F13@
 --> 1 FAMC @F9@
 <-- 1|FAMC|Y|@F9@
 --> 0 @I12@ INDI
@@ -310,8 +312,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 14 SEP 1977
 <-- 2|DATE|Y|14 SEP 1977
---> 1 FAMS @F12@
-<-- 1|FAMS|Y|@F12@
+--> 1 FAMS @F13@
+<-- 1|FAMS|Y|@F13@
 --> 0 @I15@ INDI
 <-- 0|INDI|Y|@I15@
 --> 1 NAME Steve /Fowler/
@@ -328,8 +330,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 7 MAY 1999
 <-- 2|DATE|Y|7 MAY 1999
---> 1 FAMC @F12@
-<-- 1|FAMC|Y|@F12@
+--> 1 FAMC @F13@
+<-- 1|FAMC|Y|@F13@
 --> 0 @I16@ INDI
 <-- 0|INDI|Y|@I16@
 --> 1 NAME Payton /Fowler/
@@ -346,8 +348,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 7 MAR 2000
 <-- 2|DATE|Y|7 MAR 2000
---> 1 FAMC @F12@
-<-- 1|FAMC|Y|@F12@
+--> 1 FAMC @F13@
+<-- 1|FAMC|Y|@F13@
 --> 0 @I17@ INDI
 <-- 0|INDI|Y|@I17@
 --> 1 NAME Garret /Mullins/
@@ -364,8 +366,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 13 NOV 1977
 <-- 2|DATE|Y|13 NOV 1977
---> 1 FAMS @F11@
-<-- 1|FAMS|Y|@F11@
+--> 1 FAMS @F12@
+<-- 1|FAMS|Y|@F12@
 --> 0 @I18@ INDI
 <-- 0|INDI|Y|@I18@
 --> 1 NAME Stacy /Mullins/
@@ -382,8 +384,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 8 AUG 2006
 <-- 2|DATE|Y|8 AUG 2006
---> 1 FAMC @F11@
-<-- 1|FAMC|Y|@F11@
+--> 1 FAMC @F12@
+<-- 1|FAMC|Y|@F12@
 --> 0 @I19@ INDI
 <-- 0|INDI|Y|@I19@
 --> 1 NAME Casey /Mullins/
@@ -400,8 +402,8 @@
 <-- 1|BIRT|Y
 --> 2 DATE 17 NOV 2005
 <-- 2|DATE|Y|17 NOV 2005
---> 1 FAMC @F11@
-<-- 1|FAMC|Y|@F11@
+--> 1 FAMC @F12@
+<-- 1|FAMC|Y|@F12@
 --> 0 @I20@ INDI
 <-- 0|INDI|Y|@I20@
 --> 1 NAME Madison /Roberts/
@@ -496,6 +498,24 @@
 <-- 2|DATE|Y|27 MAY 1982
 --> 1 FAMC @F4@
 <-- 1|FAMC|Y|@F4@
+--> 0 @I25@ INDI
+<-- 0|INDI|Y|@I25@
+--> 1 NAME Gary /Smith/
+<-- 1|NAME|Y|Gary /Smith/
+--> 2 GIVN Gary
+<-- 2|GIVN|N|Gary
+--> 2 SURN Smith
+<-- 2|SURN|N|Smith
+--> 2 _MARNM Smith
+<-- 2|_MARNM|N|Smith
+--> 1 SEX M
+<-- 1|SEX|Y|M
+--> 1 BIRT
+<-- 1|BIRT|Y
+--> 2 DATE 15 APR 1950
+<-- 2|DATE|Y|15 APR 1950
+--> 1 FAMS @F10@
+<-- 1|FAMS|Y|@F10@
 --> 0 @F1@ FAM
 <-- 0|FAM|Y|@F1@
 --> 1 HUSB @I1@
@@ -628,14 +648,32 @@
 <-- 1|_PRIMARY|N|Y
 --> 0 @F10@ FAM
 <-- 0|FAM|Y|@F10@
---> 1 CHIL @I7@
-<-- 1|CHIL|Y|@I7@
+--> 1 HUSB @I25@
+<-- 1|HUSB|Y|@I25@
+--> 1 WIFE @I6@
+<-- 1|WIFE|Y|@I6@
+--> 1 MARR
+<-- 1|MARR|Y
+--> 2 DATE 6 APR 1973
+<-- 2|DATE|Y|6 APR 1973
+--> 1 DIV
+<-- 1|DIV|Y
+--> 2 DATE 2 NOV 1974
+<-- 2|DATE|Y|2 NOV 1974
 --> 1 _CURRENT N
 <-- 1|_CURRENT|N|N
 --> 1 _PRIMARY N
 <-- 1|_PRIMARY|N|N
 --> 0 @F11@ FAM
 <-- 0|FAM|Y|@F11@
+--> 1 CHIL @I7@
+<-- 1|CHIL|Y|@I7@
+--> 1 _CURRENT N
+<-- 1|_CURRENT|N|N
+--> 1 _PRIMARY N
+<-- 1|_PRIMARY|N|N
+--> 0 @F12@ FAM
+<-- 0|FAM|Y|@F12@
 --> 1 HUSB @I17@
 <-- 1|HUSB|Y|@I17@
 --> 1 WIFE @I10@
@@ -652,8 +690,8 @@
 <-- 1|_CURRENT|N|Y
 --> 1 _PRIMARY Y
 <-- 1|_PRIMARY|N|Y
---> 0 @F12@ FAM
-<-- 0|FAM|Y|@F12@
+--> 0 @F13@ FAM
+<-- 0|FAM|Y|@F13@
 --> 1 HUSB @I11@
 <-- 1|HUSB|Y|@I11@
 --> 1 WIFE @I14@
@@ -680,34 +718,36 @@
 |  @I3@ |  Ashley /Fowler/  |   F    | 12 NOV 1945 |  77 |  True |     None    |  {'@F1@'} |  {'@F3@'} |
 |  @I4@ |   Mason /Fowler/  |   M    | 15 DEC 1947 |  75 |  True |     None    |  {'@F1@'} |  {'@F8@'} |
 |  @I5@ |  Marvin /Fowler/  |   M    | 10 SEP 1949 |  73 |  True |     None    |  {'@F1@'} |  {'@F9@'} |
-|  @I6@ |   Tracy /Fowler/  |   F    |  5 FEB 1951 |  72 |  True |     None    |  {'@F1@'} |     NA    |
-|  @I7@ |   Troy /Fowler/   |   M    | 30 JUL 1942 |  77 | False | 25 MAY 2020 | {'@F10@'} |  {'@F3@'} |
+|  @I6@ |   Tracy /Fowler/  |   F    |  5 FEB 1951 |  72 |  True |     None    |  {'@F1@'} | {'@F10@'} |
+|  @I7@ |   Troy /Fowler/   |   M    | 30 JUL 1942 |  77 | False | 25 MAY 2020 | {'@F11@'} |  {'@F3@'} |
 |  @I8@ |   Allison /Gill/  |   F    |  5 NOV 1949 |  73 |  True |     None    |     NA    |  {'@F9@'} |
 |  @I9@ |   Paul /Collins/  |   M    | 12 MAY 1970 |  53 |  True |     None    |  {'@F3@'} |     NA    |
-| @I10@ |  Carly /Collins/  |   F    | 16 SEP 1975 |  47 |  True |     None    |  {'@F3@'} | {'@F11@'} |
-| @I11@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |     None    |  {'@F9@'} | {'@F12@'} |
+| @I10@ |  Carly /Collins/  |   F    | 16 SEP 1975 |  47 |  True |     None    |  {'@F3@'} | {'@F12@'} |
+| @I11@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |     None    |  {'@F9@'} | {'@F13@'} |
 | @I12@ |  William /Fowler/ |   M    | 10 AUG 1980 |  42 |  True |     None    |  {'@F9@'} |     NA    |
 | @I13@ |  Lindsey /Fowler/ |   F    |  8 OCT 1981 |  41 |  True |     None    |  {'@F9@'} |     NA    |
-| @I14@ |  Harley /Turner/  |   F    | 14 SEP 1977 |  45 |  True |     None    |     NA    | {'@F12@'} |
-| @I15@ |   Steve /Fowler/  |   M    |  7 MAY 1999 |  24 |  True |     None    | {'@F12@'} |     NA    |
-| @I16@ |  Payton /Fowler/  |   M    |  7 MAR 2000 |  23 |  True |     None    | {'@F12@'} |     NA    |
-| @I17@ |  Garret /Mullins/ |   M    | 13 NOV 1977 |  45 |  True |     None    |     NA    | {'@F11@'} |
-| @I18@ |  Stacy /Mullins/  |   F    |  8 AUG 2006 |  16 |  True |     None    | {'@F11@'} |     NA    |
-| @I19@ |  Casey /Mullins/  |   F    | 17 NOV 2005 |  17 |  True |     None    | {'@F11@'} |     NA    |
+| @I14@ |  Harley /Turner/  |   F    | 14 SEP 1977 |  45 |  True |     None    |     NA    | {'@F13@'} |
+| @I15@ |   Steve /Fowler/  |   M    |  7 MAY 1999 |  24 |  True |     None    | {'@F13@'} |     NA    |
+| @I16@ |  Payton /Fowler/  |   M    |  7 MAR 2000 |  23 |  True |     None    | {'@F13@'} |     NA    |
+| @I17@ |  Garret /Mullins/ |   M    | 13 NOV 1977 |  45 |  True |     None    |     NA    | {'@F12@'} |
+| @I18@ |  Stacy /Mullins/  |   F    |  8 AUG 2006 |  16 |  True |     None    | {'@F12@'} |     NA    |
+| @I19@ |  Casey /Mullins/  |   F    | 17 NOV 2005 |  17 |  True |     None    | {'@F12@'} |     NA    |
 | @I20@ | Madison /Roberts/ |   F    |  9 NOV 1945 |  29 | False | 18 FEB 1975 |     NA    |  {'@F8@'} |
 | @I21@ |   Stacy /Fowler/  |   F    | 22 OCT 1969 |  53 |  True |     None    |  {'@F8@'} |     NA    |
 | @I22@ |   Nick /Fowler/   |   M    | 16 JUN 1970 |  52 |  True |     None    |  {'@F8@'} |     NA    |
 | @I23@ | Ellen /Valentine/ |   F    |  8 MAY 1951 |  72 |  True |     None    |     NA    |  {'@F4@'} |
 | @I24@ |   Evan /Fowler/   |   M    | 27 MAY 1982 |  41 |  True |     None    |  {'@F4@'} |     NA    |
+| @I25@ |    Gary /Smith/   |   M    | 15 APR 1950 |  73 |  True |     None    |     NA    | {'@F10@'} |
 +-------+-------------------+--------+-------------+-----+-------+-------------+-----------+-----------+
-+-------+-------------+----------+------------+------------------+---------+-------------------+-------------------------------+
-|   ID  |   Married   | Divorced | Husband ID |   Husband Name   | Wife ID |     Wife Name     |            Children           |
-+-------+-------------+----------+------------+------------------+---------+-------------------+-------------------------------+
-|  @F1@ | 27 MAR 1938 |    NA    |    @I1@    | Harvey /Fowler/  |   @I2@  |  Sidney /Fowler/  | {'@I3@','@I4@','@I5@','@I6@'} |
-|  @F3@ | 15 JUL 1967 |    NA    |    @I7@    |  Troy /Fowler/   |   @I3@  |  Ashley /Fowler/  |        {'@I9@','@I10@'}       |
-|  @F4@ | 15 JAN 1980 |    NA    |    @I4@    |  Mason /Fowler/  |  @I23@  | Ellen /Valentine/ |           {'@I24@'}           |
-|  @F8@ |  7 JUL 1967 |    NA    |    @I4@    |  Mason /Fowler/  |  @I20@  | Madison /Roberts/ |       {'@I21@','@I22@'}       |
-|  @F9@ | 18 OCT 1972 |    NA    |    @I5@    | Marvin /Fowler/  |   @I8@  |   Allison /Gill/  |   {'@I11@','@I12@','@I13@'}   |
-| @F11@ |  9 JUL 2003 |    NA    |   @I17@    | Garret /Mullins/ |  @I10@  |  Carly /Collins/  |       {'@I18@','@I19@'}       |
-| @F12@ | 10 FEB 1998 |    NA    |   @I11@    |  Pete /Fowler/   |  @I14@  |  Harley /Turner/  |       {'@I15@','@I16@'}       |
-+-------+-------------+----------+------------+------------------+---------+-------------------+-------------------------------+
++-------+-------------+------------+------------+------------------+---------+-------------------+-------------------------------+
+|   ID  |   Married   |  Divorced  | Husband ID |   Husband Name   | Wife ID |     Wife Name     |            Children           |
++-------+-------------+------------+------------+------------------+---------+-------------------+-------------------------------+
+|  @F1@ | 27 MAR 1938 |     NA     |    @I1@    | Harvey /Fowler/  |   @I2@  |  Sidney /Fowler/  | {'@I3@','@I4@','@I5@','@I6@'} |
+|  @F3@ | 15 JUL 1967 |     NA     |    @I7@    |  Troy /Fowler/   |   @I3@  |  Ashley /Fowler/  |        {'@I9@','@I10@'}       |
+|  @F4@ | 15 JAN 1980 |     NA     |    @I4@    |  Mason /Fowler/  |  @I23@  | Ellen /Valentine/ |           {'@I24@'}           |
+|  @F8@ |  7 JUL 1967 |     NA     |    @I4@    |  Mason /Fowler/  |  @I20@  | Madison /Roberts/ |       {'@I21@','@I22@'}       |
+|  @F9@ | 18 OCT 1972 |     NA     |    @I5@    | Marvin /Fowler/  |   @I8@  |   Allison /Gill/  |   {'@I11@','@I12@','@I13@'}   |
+| @F10@ |  6 APR 1973 | 2 NOV 1974 |   @I25@    |       None       |   @I6@  |   Tracy /Fowler/  |               {}              |
+| @F12@ |  9 JUL 2003 |     NA     |   @I17@    | Garret /Mullins/ |  @I10@  |  Carly /Collins/  |       {'@I18@','@I19@'}       |
+| @F13@ | 10 FEB 1998 |     NA     |   @I11@    |  Pete /Fowler/   |  @I14@  |  Harley /Turner/  |       {'@I15@','@I16@'}       |
++-------+-------------+------------+------------+------------------+---------+-------------------+-------------------------------+
