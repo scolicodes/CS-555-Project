@@ -55,8 +55,8 @@ def find_name_for_id(id):
             return individual.name
 
 
-file_name = input("Please enter the file name: ")
-file_to_read = open(file_name, 'r')
+# file_name = input("Please enter the file name: ")
+file_to_read = open('TestFamilyTree.ged', 'r')
 lines = file_to_read.readlines()
 valid_tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR", "HUSB", "WIFE", "CHIL", "DIV",
               "DATE", "HEAD", "TRLR", "NOTE"]
@@ -206,12 +206,17 @@ for indiv in individuals:
         individuals_table.add_row(
             [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death,
              "{'%s'}" % indiv.child, "{'%s'}" % indiv.spouse])
+print()
+print('Individuals')
 print(individuals_table)
 
 # Families Table
 families_table = PrettyTable()
 families_table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name",
                               "Children"]
+
+print()
+print('Families')
 for family in families:
     families_table.add_row(
         [family.id, family.married, family.divorced, family.husband_Id, family.husband_name, family.wife_Id,
