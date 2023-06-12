@@ -29,6 +29,31 @@ class family:
         self.wife_name = wife_name
         self.children = children
 
+    def validate_dates(self):
+        if self.married and self.divorced:
+            married_date = datetime.strptime(self.married, "%d %b %Y")
+            divorced_date = datetime.strptime(self.divorced, "%d %b %Y")
+            if divorced_date < married_date:
+                return False, "Divorce date {} is before marriage date {}".format(self.divorced, self.married)
+        elif not self.married and self.divorced:
+            return False, "Divorce date {} exists, but there is no marriage date".format(self.divorced)
+        return True, None
+
+
+# Code for User Stories
+def US04(family):
+    if family.divorced == "NA":  # No divorce occurred
+        return True
+
+    marriage_date = datetime.strptime(family.married, "%d %b %Y")
+    divorce_date = datetime.strptime(family.divorced, "%d %b %Y")
+
+    if marriage_date > divorce_date:
+        print(f"ERROR: US04: {family.id}: Divorced {family.divorced} before married {family.married}")
+        return False
+
+    return True
+
 
 def calculate_age(birth_date, death_date=None):
     if death_date is not None:
@@ -55,8 +80,8 @@ def find_name_for_id(id):
             return individual.name
 
 
-file_name = input("Please enter the file name: ")
-file_to_read = open(file_name, 'r')
+# file_name = input("Please enter the file name: ")
+file_to_read = open('TestFamilyTree.ged', 'r')
 lines = file_to_read.readlines()
 valid_tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR", "HUSB", "WIFE", "CHIL", "DIV",
               "DATE", "HEAD", "TRLR", "NOTE"]
@@ -217,8 +242,12 @@ families_table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husban
 
 print()
 print('Families')
-for family in families:
+for fam in families:
+    US04(fam)
     families_table.add_row(
-        [family.id, family.married, family.divorced, family.husband_Id, family.husband_name, family.wife_Id,
-         family.wife_name, "{%s}" % ",".join(family.children)])
+        [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
+         fam.wife_name, "{%s}" % ",".join(fam.children)])
 print(families_table)
+
+
+
