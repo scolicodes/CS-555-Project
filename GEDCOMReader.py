@@ -55,8 +55,8 @@ def find_name_for_id(id):
             return individual.name
 
 
-# file_name = input("Please enter the file name: ")
-file_to_read = open('TestFamilyTree.ged', 'r')
+file_name = input("Please enter the file name: ")
+file_to_read = open(file_name, 'r')
 lines = file_to_read.readlines()
 valid_tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR", "HUSB", "WIFE", "CHIL", "DIV",
               "DATE", "HEAD", "TRLR", "NOTE"]
