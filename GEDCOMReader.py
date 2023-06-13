@@ -55,6 +55,23 @@ def US04(family):
     return True
 
 
+def US05(family, individuals):
+    if family.married == "NA":  # No marriage occurred
+        return True
+
+    marriage_date = datetime.strptime(family.married, "%d %b %Y")
+
+    for indiv in individuals:
+        if indiv.id == family.husband_Id or indiv.id == family.wife_Id:
+            if indiv.death is not None and indiv.death != "NA":
+                death_date = datetime.strptime(indiv.death, "%d %b %Y")
+                if marriage_date > death_date:
+                    print(f"ERROR: US05: {family.id}: Married {family.married} after death {indiv.death} of individual {indiv.id}")
+                    return False
+
+    return True
+
+
 def calculate_age(birth_date, death_date=None):
     if death_date is not None:
         birth_date_object = datetime.strptime(birth_date, "%d %b %Y").date()
@@ -244,6 +261,7 @@ print()
 print('Families')
 for fam in families:
     US04(fam)
+    US05(fam, individuals)
     families_table.add_row(
         [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
          fam.wife_name, "{%s}" % ",".join(fam.children)])
