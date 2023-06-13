@@ -108,6 +108,12 @@ def date_after_current_date(date):
     date = datetime.strptime(date, "%d %b %Y").date()
     return date > current_date
 
+def age_over_150(indiv):
+    if indiv.age > 150:
+        return True
+    else:
+        return False
+
 file_name = input("Please enter the file name: ")
 file_to_read = open(file_name, 'r')
 lines = file_to_read.readlines()
@@ -251,6 +257,11 @@ for indiv in individuals:
          print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Birthday {indiv.birthday} occurs in future")
     if indiv.death != None and date_after_current_date(indiv.death):
         print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Death {indiv.death} occurs in future")
+    if age_over_150(indiv):
+        if indiv.death == None:
+            print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old - Birth date {indiv.birthday}")
+        else:
+            print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old at death - Birth date {indiv.birthday}: Death {indiv.death}")
     if indiv.child is None and indiv.spouse is None:
         individuals_table.add_row(
             [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, "NA", "NA"])
