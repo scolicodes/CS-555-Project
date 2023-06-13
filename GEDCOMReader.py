@@ -109,10 +109,7 @@ def date_after_current_date(date):
     return date > current_date
 
 def age_over_150(indiv):
-    if indiv.age > 150:
-        return True
-    else:
-        return False
+    return indiv.age > 150
 
 file_name = input("Please enter the file name: ")
 file_to_read = open(file_name, 'r')
