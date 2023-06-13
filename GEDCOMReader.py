@@ -277,9 +277,9 @@ for fam in families:
     US04(fam)
     US05(fam, individuals)
     if fam.married != "NA" and date_after_current_date(fam.married):
-         print(f"ERROR: FAMILY: US01: {fam.id}: Married {fam.married} occurs in future")
+         print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
     if fam.divorced != "NA" and date_after_current_date(fam.divorced):
-        print(f"ERROR: FAMILY: US01: {fam.id}: Divorced {fam.divorced} occurs in future")
+        print(f"ERROR: FAMILY: US01: {fam.id}: Divorce date {fam.divorced} occurs in future")
     families_table.add_row(
         [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
          fam.wife_name, "{%s}" % ",".join(fam.children)])
