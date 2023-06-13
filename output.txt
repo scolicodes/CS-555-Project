@@ -44,8 +44,8 @@
 <-- 2|DATE|Y|17 JUN 1920
 --> 1 DEAT Y
 <-- 1|DEAT|Y|Y
---> 2 DATE 4 OCT 2011
-<-- 2|DATE|Y|4 OCT 2011
+--> 2 DATE 4 OCT 1928
+<-- 2|DATE|Y|4 OCT 1928
 --> 1 FAMS @F1@
 <-- 1|FAMS|Y|@F1@
 --> 1 FAMC @F2@
@@ -346,8 +346,8 @@
 <-- 1|SEX|Y|M
 --> 1 BIRT
 <-- 1|BIRT|Y
---> 2 DATE 7 MAR 2000
-<-- 2|DATE|Y|7 MAR 2000
+--> 2 DATE 7 MAR 2025
+<-- 2|DATE|Y|7 MAR 2025
 --> 1 FAMC @F13@
 <-- 1|FAMC|Y|@F13@
 --> 0 @I17@ INDI
@@ -422,8 +422,8 @@
 <-- 2|DATE|Y|9 NOV 1945
 --> 1 DEAT Y
 <-- 1|DEAT|Y|Y
---> 2 DATE 18 FEB 1975
-<-- 2|DATE|Y|18 FEB 1975
+--> 2 DATE 13 JUN 2023
+<-- 2|DATE|Y|13 JUN 2023
 --> 1 FAMS @F8@
 <-- 1|FAMS|Y|@F8@
 --> 0 @I21@ INDI
@@ -654,12 +654,12 @@
 <-- 1|WIFE|Y|@I6@
 --> 1 MARR
 <-- 1|MARR|Y
---> 2 DATE 6 APR 1973
-<-- 2|DATE|Y|6 APR 1973
+--> 2 DATE 6 APR 2024
+<-- 2|DATE|Y|6 APR 2024
 --> 1 DIV
 <-- 1|DIV|Y
---> 2 DATE 2 NOV 1974
-<-- 2|DATE|Y|2 NOV 1974
+--> 2 DATE 2 NOV 2025
+<-- 2|DATE|Y|2 NOV 2025
 --> 1 _CURRENT N
 <-- 1|_CURRENT|N|N
 --> 1 _PRIMARY N
@@ -710,31 +710,35 @@
 <-- 1|_PRIMARY|N|Y
 --> 0 TRLR
 <-- 0|TRLR|Y
+ERROR: INDIVIDUAL US01: @I16@: Birthday 7 MAR 2025 occurs in future
+ERROR: US05: @F1@: Married 27 MAR 1938 after death 4 OCT 1928 of individual @I1@
+ERROR: FAMILY: US01: @F10@: Marriage date 6 APR 2024 occurs in future
+ERROR: FAMILY: US01: @F10@: Divorce date 2 NOV 2025 occurs in future
 
 Individuals
 +-------+-------------------+--------+-------------+-----+-------+-------------+-----------+-----------+
 |   ID  |        Name       | Gender |   Birthday  | Age | Alive |    Death    |   Child   |   Spouse  |
 +-------+-------------------+--------+-------------+-----+-------+-------------+-----------+-----------+
-|  @I1@ |  Harvey /Fowler/  |   M    | 17 JUN 1920 |  91 | False |  4 OCT 2011 |  {'@F2@'} |  {'@F1@'} |
+|  @I1@ |  Harvey /Fowler/  |   M    | 17 JUN 1920 |  8  | False |  4 OCT 1928 |  {'@F2@'} |  {'@F1@'} |
 |  @I2@ |  Sidney /Fowler/  |   F    |  7 MAR 1920 |  90 | False | 29 APR 2010 |     NA    |  {'@F1@'} |
-|  @I3@ |  Ashley /Fowler/  |   F    | 12 NOV 1945 |  77 |  True |     None    |  {'@F1@'} |  {'@F3@'} |
-|  @I4@ |   Mason /Fowler/  |   M    | 15 DEC 1947 |  75 |  True |     None    |  {'@F1@'} |  {'@F8@'} |
-|  @I5@ |  Marvin /Fowler/  |   M    | 10 SEP 1949 |  73 |  True |     None    |  {'@F1@'} |  {'@F9@'} |
-|  @I6@ |   Tracy /Fowler/  |   F    |  5 FEB 1951 |  72 |  True |     None    |  {'@F1@'} | {'@F10@'} |
+|  @I3@ |  Ashley /Fowler/  |   F    | 12 NOV 1945 |  77 |  True |      NA     |  {'@F1@'} |  {'@F3@'} |
+|  @I4@ |   Mason /Fowler/  |   M    | 15 DEC 1947 |  75 |  True |      NA     |  {'@F1@'} |  {'@F8@'} |
+|  @I5@ |  Marvin /Fowler/  |   M    | 10 SEP 1949 |  73 |  True |      NA     |  {'@F1@'} |  {'@F9@'} |
+|  @I6@ |   Tracy /Fowler/  |   F    |  5 FEB 1951 |  72 |  True |      NA     |  {'@F1@'} | {'@F10@'} |
 |  @I7@ |   Troy /Fowler/   |   M    | 30 JUL 1942 |  77 | False | 25 MAY 2020 | {'@F11@'} |  {'@F3@'} |
 |  @I8@ |   Allison /Gill/  |   F    |  5 NOV 1949 |  73 |  True |     None    |     NA    |  {'@F9@'} |
 |  @I9@ |   Paul /Collins/  |   M    | 12 MAY 1970 |  53 |  True |     None    |  {'@F3@'} |     NA    |
-| @I10@ |  Carly /Collins/  |   F    | 16 SEP 1975 |  47 |  True |     None    |  {'@F3@'} | {'@F12@'} |
-| @I11@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |     None    |  {'@F9@'} | {'@F13@'} |
+| @I10@ |  Carly /Collins/  |   F    | 16 SEP 1975 |  47 |  True |      NA     |  {'@F3@'} | {'@F12@'} |
+| @I11@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |      NA     |  {'@F9@'} | {'@F13@'} |
 | @I12@ |  William /Fowler/ |   M    | 10 AUG 1980 |  42 |  True |     None    |  {'@F9@'} |     NA    |
 | @I13@ |  Lindsey /Fowler/ |   F    |  8 OCT 1981 |  41 |  True |     None    |  {'@F9@'} |     NA    |
 | @I14@ |  Harley /Turner/  |   F    | 14 SEP 1977 |  45 |  True |     None    |     NA    | {'@F13@'} |
 | @I15@ |   Steve /Fowler/  |   M    |  7 MAY 1999 |  24 |  True |     None    | {'@F13@'} |     NA    |
-| @I16@ |  Payton /Fowler/  |   M    |  7 MAR 2000 |  23 |  True |     None    | {'@F13@'} |     NA    |
+| @I16@ |  Payton /Fowler/  |   M    |  7 MAR 2025 |  -2 |  True |     None    | {'@F13@'} |     NA    |
 | @I17@ |  Garret /Mullins/ |   M    | 13 NOV 1977 |  45 |  True |     None    |     NA    | {'@F12@'} |
 | @I18@ |  Stacy /Mullins/  |   F    |  8 AUG 2006 |  16 |  True |     None    | {'@F12@'} |     NA    |
 | @I19@ |  Casey /Mullins/  |   F    | 17 NOV 2005 |  17 |  True |     None    | {'@F12@'} |     NA    |
-| @I20@ | Madison /Roberts/ |   F    |  9 NOV 1945 |  29 | False | 18 FEB 1975 |     NA    |  {'@F8@'} |
+| @I20@ | Madison /Roberts/ |   F    |  9 NOV 1945 |  77 | False | 13 JUN 2023 |     NA    |  {'@F8@'} |
 | @I21@ |   Stacy /Fowler/  |   F    | 22 OCT 1969 |  53 |  True |     None    |  {'@F8@'} |     NA    |
 | @I22@ |   Nick /Fowler/   |   M    | 16 JUN 1970 |  52 |  True |     None    |  {'@F8@'} |     NA    |
 | @I23@ | Ellen /Valentine/ |   F    |  8 MAY 1951 |  72 |  True |     None    |     NA    |  {'@F4@'} |
@@ -751,7 +755,7 @@ Families
 |  @F4@ | 15 JAN 1980 |     NA     |    @I4@    |  Mason /Fowler/  |  @I23@  | Ellen /Valentine/ |           {'@I24@'}           |
 |  @F8@ |  7 JUL 1967 |     NA     |    @I4@    |  Mason /Fowler/  |  @I20@  | Madison /Roberts/ |       {'@I21@','@I22@'}       |
 |  @F9@ | 18 OCT 1972 |     NA     |    @I5@    | Marvin /Fowler/  |   @I8@  |   Allison /Gill/  |   {'@I11@','@I12@','@I13@'}   |
-| @F10@ |  6 APR 1973 | 2 NOV 1974 |   @I25@    |       None       |   @I6@  |   Tracy /Fowler/  |               {}              |
+| @F10@ |  6 APR 2024 | 2 NOV 2025 |   @I25@    |       None       |   @I6@  |   Tracy /Fowler/  |               {}              |
 | @F12@ |  9 JUL 2003 |     NA     |   @I17@    | Garret /Mullins/ |  @I10@  |  Carly /Collins/  |       {'@I18@','@I19@'}       |
 | @F13@ | 10 FEB 1998 |     NA     |   @I11@    |  Pete /Fowler/   |  @I14@  |  Harley /Turner/  |       {'@I15@','@I16@'}       |
 +-------+-------------+------------+------------+------------------+---------+-------------------+-------------------------------+
