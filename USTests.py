@@ -1,5 +1,5 @@
 import unittest
-from GEDCOMReader import family, individual, US04, US05
+from GEDCOMReader import family, individual, US04, US05, date_after_current_date
 
 
 class TestUS04(unittest.TestCase):
@@ -49,8 +49,35 @@ class TestUS05(unittest.TestCase):
         self.assertTrue(US05(self.family3, [self.individual3, self.individual2], False))  # Wife deceased but married before death
         self.assertFalse(US05(self.family4, [self.individual1, self.individual4], False))  # Husband deceased and married after death
         self.assertFalse(US05(self.family5, [self.individual3, self.individual2], False))  # Wife deceased and married after death
+    
+class TestUS01(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US01
+    Sprint: Sprint 1
+    """
 
+    def setUp(self):
+        self.family1 = family(id="F1", married="20 OCT 1988", husband_Id="I04", husband_name="James Kern", wife_Id="I05", wife_name="Sara Keller")  # Marriage date before current date
+        self.family2 = family(id="F2", married="13 JUN 1977", husband_Id="I06", husband_name="Kevin Burns", wife_Id="I07", wife_name="Jackie Parker", divorced="20 APR 2001")  # Divorce date before current date
+        self.individual1 = individual(id="I01", name="Helen Klien", birthday="11 JAN 1998", age=25, alive=True) # Birthday date before current date
+        self.individual2 = individual(id="I02", name="Mary Freeman", birthday="22 OCT 1944", age=79, alive=False, death="2 SEP 2010") # Death date before current date
+        self.individual3 = individual(id="I03", name="Fred Green", birthday="15 NOV 2023", age=0) # Birthday date after current date
 
+    def test_marriage_date_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.family1.married))
+
+    def test_divorce_date_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.family2.divorced))
+    
+    def test_birthday_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.individual1.birthday))
+    
+    def test_death_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.individual2.death))
+    
+    def test_birthday_after_current_date(self):
+        self.assertTrue(date_after_current_date(self.individual3.birthday))
 
 if __name__ == '__main__':
     unittest.main()
