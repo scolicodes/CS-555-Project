@@ -41,7 +41,7 @@ class family:
 
 
 # Code for User Stories
-def US04(family):
+def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
         return True
 
@@ -49,27 +49,34 @@ def US04(family):
     divorce_date = datetime.strptime(family.divorced, "%d %b %Y")
 
     if marriage_date > divorce_date:
-        print(f"ERROR: US04: {family.id}: Divorced {family.divorced} before married {family.married}")
+        if printErrors:
+            print(f"ERROR: US04: {family.id}: Divorced {family.divorced} before married {family.married}")
         return False
 
     return True
 
 
-def US05(family, individuals):
+def US05(family, individuals, printErrors=True):
     if family.married == "NA":  # No marriage occurred
         return True
 
     marriage_date = datetime.strptime(family.married, "%d %b %Y")
 
+    spouse_ids = {family.husband_Id, family.wife_Id}
     for indiv in individuals:
-        if indiv.id == family.husband_Id or indiv.id == family.wife_Id:
+        if indiv.id in spouse_ids:
+            spouse_ids.remove(indiv.id)  # Remove the spouse from the set of spouses to check
             if indiv.death is not None and indiv.death != "NA":
                 death_date = datetime.strptime(indiv.death, "%d %b %Y")
                 if marriage_date > death_date:
-                    print(f"ERROR: US05: {family.id}: Married {family.married} after death {indiv.death} of individual {indiv.id}")
+                    if printErrors:
+                        print(f"ERROR: US05: {family.id}: Married {family.married} after death {indiv.death} of individual {indiv.id}")
                     return False
+            if not spouse_ids:  # If we've checked both spouses, we can break early
+                break
 
     return True
+
 
 
 def calculate_age(birth_date, death_date=None):
