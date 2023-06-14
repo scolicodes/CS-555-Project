@@ -240,6 +240,9 @@ for line in lines:
         print("<-- " + level + "|" + tag + "|" + is_valid)
 
 file_to_read.close()
+
+by_id = {indi.id: indi for indi in individuals}
+
 # Individuals Table
 individuals_table = PrettyTable()
 individuals_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
