@@ -101,9 +101,6 @@ def US06(family, individuals, printErrors=True):
 def US08(family, individuals, printErrors = True):
     if not family.children:
         return True
-    
-    for c in family.children:
-        birth = 
 
     if family.married == "NA" and family.divorced == "NA":
         if printErrors:
