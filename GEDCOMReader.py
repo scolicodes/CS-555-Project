@@ -40,7 +40,41 @@ class family:
         return True, None
 
 
+by_id = {}
+
+
 # Code for User Stories
+def check_born_before_married(family, printErrors=True, by_id=by_id):
+    """Satisfies US02"""
+    if family.married == "NA" or family.married is None:
+        return True
+    marriage_date = datetime.strptime(family.married, "%d %b %Y")
+
+    def validate_bday(id):
+        bday = by_id[id].birthday
+        return bday is None or bday == "NA" or datetime.strptime(bday, "%d %b %Y") < marriage_date
+
+    if validate_bday(family.wife_Id) and validate_bday(family.husband_Id):
+        return True
+    else:
+        if printErrors:
+            print(f"ERROR: US02: {family.id}: Married {family.married} before birth")
+        return False
+
+
+def check_born_before_death(indi: individual, printErrors=True):
+    """Satisfies US03"""
+    if indi.death == "NA" or indi.death is None or indi.birthday == "NA" or indi.birthday is None:
+        return True
+
+    birth = datetime.strptime(indi.birthday, "%d %b %Y")
+    death = datetime.strptime(indi.death, "%d %b %Y")
+    if birth < death:
+        return True
+    else:
+        if printErrors:
+            print(f"ERROR: US03: {indi.id}: Died before birth")
+
 def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
         return True
@@ -54,8 +88,6 @@ def US04(family, printErrors=True):
         return False
 
     return True
-
-
 def US05(family, individuals, printErrors=True):
     if family.married == "NA":  # No marriage occurred
         return True
@@ -288,7 +320,7 @@ for line in lines:
 
 file_to_read.close()
 
-by_id = {indi.id: indi for indi in individuals}
+by_id.update({indi.id: indi for indi in individuals})
 
 # Individuals Table
 individuals_table = PrettyTable()
@@ -298,6 +330,7 @@ for indiv in individuals:
          print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Birthday {indiv.birthday} occurs in future")
     if indiv.death != None and date_after_current_date(indiv.death):
         print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Death {indiv.death} occurs in future")
+    check_born_before_death(indiv)
     if age_over_150(indiv):
         if indiv.death == None:
             print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old - Birth date {indiv.birthday}")
@@ -334,7 +367,7 @@ for fam in families:
     US06(fam, individuals)
     US08(fam, individuals)
     if fam.married != "NA" and date_after_current_date(fam.married):
-         print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
+        print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
     if fam.divorced != "NA" and date_after_current_date(fam.divorced):
         print(f"ERROR: FAMILY: US01: {fam.id}: Divorce date {fam.divorced} occurs in future")
     families_table.add_row(
