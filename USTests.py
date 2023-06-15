@@ -1,5 +1,7 @@
 import unittest
-from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age
+from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age, \
+    check_born_before_death, check_born_before_married
+
 
 class TestUS01(unittest.TestCase):
     """
@@ -11,9 +13,9 @@ class TestUS01(unittest.TestCase):
     def setUp(self):
         self.family1 = family(id="F1", married="20 OCT 1988", husband_Id="I04", husband_name="James Kern", wife_Id="I05", wife_name="Sara Keller")  # Marriage date before current date
         self.family2 = family(id="F2", married="13 JUN 1977", husband_Id="I06", husband_name="Kevin Burns", wife_Id="I07", wife_name="Jackie Parker", divorced="20 APR 2001")  # Divorce date before current date
-        self.individual1 = individual(id="I01", name="Helen Klien", birthday="11 JAN 1998", age=25, alive=True) # Birthday date before current date
-        self.individual2 = individual(id="I02", name="Mary Freeman", birthday="22 OCT 1944", age=79, alive=False, death="2 SEP 2010") # Death date before current date
-        self.individual3 = individual(id="I03", name="Fred Green", birthday="15 NOV 2023", age=0) # Birthday date after current date
+        self.individual1 = individual(id="I01", name="Helen Klien", birthday="11 JAN 1998", age=25, alive=True)  # Birthday date before current date
+        self.individual2 = individual(id="I02", name="Mary Freeman", birthday="22 OCT 1944", age=79, alive=False, death="2 SEP 2010")  # Death date before current date
+        self.individual3 = individual(id="I03", name="Fred Green", birthday="15 NOV 2023", age=0)  # Birthday date after current date
 
     def test_marriage_date_before_current_date(self):
         self.assertFalse(date_after_current_date(self.family1.married))
@@ -29,6 +31,54 @@ class TestUS01(unittest.TestCase):
     
     def test_birthday_after_current_date(self):
         self.assertTrue(date_after_current_date(self.individual3.birthday))
+
+
+class TestUS02(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US02
+    Sprint: Sprint 1
+    """
+
+    def setUp(self):
+        self.family1 = family("F1", "10 FEB 1990", husband_Id="H1", wife_Id="W1")  # husband born before
+        self.family2 = family("F2", "20 JAN 2005", husband_Id="H2", wife_Id="W1")  # No birthday provided for Husband
+        self.family3 = family("F3", "30 MAR 2010", husband_Id="H3", wife_Id="W2")  # No birthday for wife, husband born after
+        self.family4 = family("F4", "NA", "NA", husband_Id="H1", wife_Id="W2")  # No marriage date
+        self.by_id = {
+            "H1": individual("H1", "Phil", birthday="30 APR 1989"),
+            "H2": individual("H2", "Bob", birthday="NA"),
+            "H3": individual("H3", "Jeff", birthday="30 MAY 2020"),
+            "W1": individual("W1", "Sharon", birthday="20 MAR 1987"),
+            "W2": individual("W2", "Karen", birthday="30 APR 1989")
+        }
+
+    def test_birth_before_marriage(self):
+        self.assertTrue(check_born_before_married(self.family1, False, self.by_id))  # Marriage date is before divorce date
+        self.assertTrue(check_born_before_married(self.family2, False, self.by_id))  # No divorce date provided
+        self.assertFalse(check_born_before_married(self.family3, False, self.by_id))  # Marriage date is after divorce date
+        self.assertTrue(check_born_before_married(self.family4, False, self.by_id))  # Marriage and divorce dates are the same
+
+
+class TestUS03(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US03
+    Sprint: Sprint 1
+    """
+
+    def setUp(self):
+        self.indi1 = individual("I1", birthday="10 FEB 1990", death="15 MAR 2000")  # born before death
+        self.indi2 = individual("I1", birthday="NA", death="15 MAR 2000")  # no birthday
+        self.indi3 = individual("I1", birthday="10 FEB 2010", death="15 MAR 2000")  # born after death
+        self.indi4 = individual("I1", birthday="10 FEB 1990", death="NA")  # still alive
+
+    def test_birth_before_marriage(self):
+        self.assertTrue(check_born_before_death(self.indi1, False))  # born before death
+        self.assertTrue(check_born_before_death(self.indi2, False))  # no birthday
+        self.assertFalse(check_born_before_death(self.indi3, False))  # born after death
+        self.assertTrue(check_born_before_death(self.indi4, False))  # still alive
+
 
 class TestUS04(unittest.TestCase):
     """
