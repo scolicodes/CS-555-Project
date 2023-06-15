@@ -146,7 +146,14 @@ def find_name_for_id(id):
     for individual in individuals:
         if individual.id == id:
             return individual.name
+        
+def date_after_current_date(date):
+    current_date = datetime.now().date()
+    date = datetime.strptime(date, "%d %b %Y").date()
+    return date > current_date
 
+def age_over_150(indiv):
+    return indiv.age > 150
 
 file_name = input("Please enter the file name: ")
 file_to_read = open(file_name, 'r')
@@ -280,10 +287,22 @@ for line in lines:
         print("<-- " + level + "|" + tag + "|" + is_valid)
 
 file_to_read.close()
+
+by_id = {indi.id: indi for indi in individuals}
+
 # Individuals Table
 individuals_table = PrettyTable()
 individuals_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
 for indiv in individuals:
+    if indiv.birthday != None and date_after_current_date(indiv.birthday):
+         print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Birthday {indiv.birthday} occurs in future")
+    if indiv.death != None and date_after_current_date(indiv.death):
+        print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Death {indiv.death} occurs in future")
+    if age_over_150(indiv):
+        if indiv.death == None:
+            print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old - Birth date {indiv.birthday}")
+        else:
+            print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old at death - Birth date {indiv.birthday}: Death {indiv.death}")
     if indiv.child is None and indiv.spouse is None:
         individuals_table.add_row(
             [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, "NA", "NA"])
@@ -295,29 +314,40 @@ for indiv in individuals:
         individuals_table.add_row(
             [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death,
              "{'%s'}" % indiv.child, "NA"])
+    elif indiv.death is None:
+        individuals_table.add_row(
+            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, "NA",
+             "{'%s'}" % indiv.child, "{'%s'}" % indiv.spouse])
     else:
         individuals_table.add_row(
             [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death,
              "{'%s'}" % indiv.child, "{'%s'}" % indiv.spouse])
-print()
-print('Individuals')
-print(individuals_table)
 
 # Families Table
 families_table = PrettyTable()
 families_table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name",
                               "Children"]
 
-print()
-print('Families')
 for fam in families:
     US04(fam)
     US05(fam, individuals)
     US06(fam, individuals)
     US08(fam, individuals)
+    if fam.married != "NA" and date_after_current_date(fam.married):
+         print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
+    if fam.divorced != "NA" and date_after_current_date(fam.divorced):
+        print(f"ERROR: FAMILY: US01: {fam.id}: Divorce date {fam.divorced} occurs in future")
     families_table.add_row(
         [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
          fam.wife_name, "{%s}" % ",".join(fam.children)])
+# Print Individuals Table
+print()
+print('Individuals')
+print(individuals_table)
+
+# Print Family Table
+print()
+print('Families')
 print(families_table)
 
 

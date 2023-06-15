@@ -1,6 +1,34 @@
 import unittest
-from GEDCOMReader import family, individual, US04, US05, US06
+from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age
 
+class TestUS01(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US01
+    Sprint: Sprint 1
+    """
+
+    def setUp(self):
+        self.family1 = family(id="F1", married="20 OCT 1988", husband_Id="I04", husband_name="James Kern", wife_Id="I05", wife_name="Sara Keller")  # Marriage date before current date
+        self.family2 = family(id="F2", married="13 JUN 1977", husband_Id="I06", husband_name="Kevin Burns", wife_Id="I07", wife_name="Jackie Parker", divorced="20 APR 2001")  # Divorce date before current date
+        self.individual1 = individual(id="I01", name="Helen Klien", birthday="11 JAN 1998", age=25, alive=True) # Birthday date before current date
+        self.individual2 = individual(id="I02", name="Mary Freeman", birthday="22 OCT 1944", age=79, alive=False, death="2 SEP 2010") # Death date before current date
+        self.individual3 = individual(id="I03", name="Fred Green", birthday="15 NOV 2023", age=0) # Birthday date after current date
+
+    def test_marriage_date_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.family1.married))
+
+    def test_divorce_date_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.family2.divorced))
+    
+    def test_birthday_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.individual1.birthday))
+    
+    def test_death_before_current_date(self):
+        self.assertFalse(date_after_current_date(self.individual2.death))
+    
+    def test_birthday_after_current_date(self):
+        self.assertTrue(date_after_current_date(self.individual3.birthday))
 
 class TestUS04(unittest.TestCase):
     """
@@ -75,7 +103,39 @@ class TestUS06(unittest.TestCase):
         self.assertTrue(US06(self.family3, [self.individual3, self.individual2], False))  # Wife deceased but married before death
         self.assertFalse(US06(self.family4, [self.individual1, self.individual4], False))  # Husband deceased and married after death
         self.assertFalse(US06(self.family5, [self.individual3, self.individual2], False))  # Wife deceased and married after death
+class TestUS07(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US07
+    Sprint: Sprint 1
+    """
 
+    def setUp(self):
+        self.individual1 = individual(id="I01", name="Gary Burger", birthday="11 JUL 1720", alive=True) # Living and older than 150 years
+        self.individual2 = individual(id="I02", name="Sara Gallegher", birthday="11 NOV 1740", alive=False, death="21 OCT 1895") # Not living but died over 150 years old
+        self.individual3 = individual(id="I03", name="Jalen Bass", birthday="2 NOV 1998", alive=False, death="10 DEC 2011") # Not living but died under 150 years old
+        self.individual4 = individual(id="I04", name="Isabel Mullen", birthday="2 NOV 1998", alive=True) # Living and 25 years old
+        self.individual5 = individual(id="I05", name="Ashley Lawrence", birthday="22 MAY 1913", alive=True) # Living and 110 years old
+
+    def test_living_and_older_than_150(self):
+        self.individual1.age = calculate_age(self.individual1.birthday)
+        self.assertTrue(age_over_150(self.individual1))
+
+    def test_not_living_and_older_than_150(self):
+        self.individual2.age = calculate_age(self.individual2.birthday, self.individual2.death)
+        self.assertTrue(age_over_150(self.individual2))
+    
+    def test_not_living_and_under_150(self):
+        self.individual3.age = calculate_age(self.individual3.birthday, self.individual3.death)
+        self.assertFalse(age_over_150(self.individual3))
+    
+    def test_living_and_under_150(self):
+        self.individual4.age = calculate_age(self.individual4.birthday)
+        self.assertFalse(age_over_150(self.individual4))
+    
+    def test_living_and_under_150_but_older_than_100(self):
+        self.individual5.age = calculate_age(self.individual5.birthday)
+        self.assertFalse(age_over_150(self.individual5))
 
 if __name__ == '__main__':
     unittest.main()
