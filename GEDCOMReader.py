@@ -77,6 +77,53 @@ def US05(family, individuals, printErrors=True):
 
     return True
 
+def US06(family, individuals, printErrors=True):
+    if family.divorced == "NA": #No divorce
+        return True
+    
+    divorce_date = datetime.strptime(family.divorced, "%d %b %Y")
+
+    family_ids = {family.husband_Id, family.wife_Id}
+    for i in individuals:
+        if i.id in family_ids:
+            family_ids.remove(i.id)
+            if i.death is not None and i.death != "NA":
+                death_date = datetime.strptime(i.death, "%d %b %Y")
+                if divorce_date > death_date:
+                    if printErrors:
+                        print(f"ERROR: US06: {family.id}: Divorced {family.divorced} after death {i.death} of individual {i.id}")
+                    return False
+            if not family_ids:
+                break
+
+    return True
+
+def US08(family, individuals, printErrors = True):
+    if not family.children:
+        return True
+    
+    for c in family.children:
+        birth = 
+
+    if family.married == "NA" and family.divorced == "NA":
+        if printErrors:
+            print(f"ERROR: US08: {family.id}: Had child {family.children[0]} before marriage (unmarried)")
+        return False
+
+    marriage_date = datetime.strptime(family.married, "%d %b %Y")
+    birth_date = individuals[0].birthday # Temp variable
+
+    for i in individuals:
+        if family.children[0].strip('\'') == i.id:
+            birth_date = datetime.strptime(i.birthday, "%d %b %Y")
+
+    if birth_date < marriage_date:
+        if printErrors:
+            print(f"ERROR: US08: {family.id}: Had child {family.children[0]} before marriage {family.married}")
+        return False
+
+
+    return True
 
 
 def calculate_age(birth_date, death_date=None):
@@ -269,6 +316,8 @@ print('Families')
 for fam in families:
     US04(fam)
     US05(fam, individuals)
+    US06(fam, individuals)
+    US08(fam, individuals)
     families_table.add_row(
         [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
          fam.wife_name, "{%s}" % ",".join(fam.children)])
