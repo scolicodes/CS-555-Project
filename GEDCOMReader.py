@@ -151,7 +151,6 @@ def US08(family, individuals, printErrors = True):
             print(f"ERROR: US08: {family.id}: Had child {family.children[0]} before marriage {family.married}")
         return False
 
-
     return True
 
 
@@ -187,7 +186,7 @@ def date_after_current_date(date):
 def age_over_150(indiv):
     return indiv.age > 150
 
-file_name = input("Please enter the file name: ")
+file_name = input("Please enter the file name: ") or 'TestFamilyTree.ged'
 file_to_read = open(file_name, 'r')
 lines = file_to_read.readlines()
 valid_tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR", "HUSB", "WIFE", "CHIL", "DIV",
