@@ -1,5 +1,5 @@
 import unittest
-from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age, \
+from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age, US08, \
     check_born_before_death, check_born_before_married
 
 
@@ -153,6 +153,7 @@ class TestUS06(unittest.TestCase):
         self.assertTrue(US06(self.family3, [self.individual3, self.individual2], False))  # Wife deceased but married before death
         self.assertFalse(US06(self.family4, [self.individual1, self.individual4], False))  # Husband deceased and married after death
         self.assertFalse(US06(self.family5, [self.individual3, self.individual2], False))  # Wife deceased and married after death
+
 class TestUS07(unittest.TestCase):
     """
     Author: Ronnie Arvanites
@@ -186,6 +187,32 @@ class TestUS07(unittest.TestCase):
     def test_living_and_under_150_but_older_than_100(self):
         self.individual5.age = calculate_age(self.individual5.birthday)
         self.assertFalse(age_over_150(self.individual5))
+
+class TestUS08(unittest.TestCase):
+    """
+    Author: Zac Schuh
+    User Story: US08
+    Sprint: Sprint 1
+    """
+
+    def setUp(self):
+        self.family1 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I3"])  # Married and had a child after marriage
+        self.family2 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Gets married and never had a child
+        self.family3 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I4"])  # Had a child a year before marriage
+        self.family4 = family("F1", "15 JUN 1995", "15 JUNE 1998", "I1", "John Smith", "I2", "Jane Smith", ["I3"])  # Get married, have a child, then divorce
+        self.family5 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I3", "I4"])  # Had a child, got married, then had another child
+        self.individual1 = individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960", death="5 JUL 2020")
+        self.individual2 = individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1970", death="1 MAR 2020")
+        self.individual3 = individual(id="I3", name="Jack Smith", gender="M", birthday="01 JAN 1996", death="NA")
+        self.individual4 = individual(id="I4", name="Jill Smith", gender="F", birthday="01 JAN 1993", death="NA")
+        self.individuals = [self.individual1, self.individual2, self.individual3, self.individual4]
+
+    def test_marriage_before_birth(self):
+        self.assertTrue(US08(self.family1, [self.individual1, self.individual2, self.individual3], False))
+        self.assertTrue(US08(self.family2, [self.individual1, self.individual2], False))
+        self.assertFalse(US08(self.family3, [self.individual1, self.individual2, self.individual4], False))
+        self.assertTrue(US08(self.family4, [self.individual1, self.individual2, self.individual3], False))
+        self.assertFalse(US08(self.family5, [self.individual1, self.individual2, self.individual3, self.individual4], False))
 
 if __name__ == '__main__':
     unittest.main()

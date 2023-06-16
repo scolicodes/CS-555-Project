@@ -131,7 +131,7 @@ def US06(family, individuals, printErrors=True):
     return True
 
 def US08(family, individuals, printErrors = True):
-    if not family.children:
+    if not family.children or family.children == "NA":
         return True
 
     if family.married == "NA" and family.divorced == "NA":
@@ -140,18 +140,14 @@ def US08(family, individuals, printErrors = True):
         return False
 
     marriage_date = datetime.strptime(family.married, "%d %b %Y")
-    birth_date = individuals[0].birthday # Temp variable
-
-    for i in individuals:
-        if family.children[0].strip('\'') == i.id:
-            birth_date = datetime.strptime(i.birthday, "%d %b %Y")
-
-    if birth_date < marriage_date:
-        if printErrors:
-            print(f"ERROR: US08: {family.id}: Had child {family.children[0]} before marriage {family.married}")
-        return False
-
-
+    
+    for c in family.children:
+        for i in individuals:
+            if c.strip('\'') == i.id and datetime.strptime(i.birthday, "%d %b %Y") < marriage_date:
+                if printErrors:
+                    print(f"ERROR: US08: {family.id}: Had child {c} before marriage {family.married}")
+                return False
+        
     return True
 
 
