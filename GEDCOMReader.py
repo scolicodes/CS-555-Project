@@ -58,7 +58,7 @@ def check_born_before_married(family, printErrors=True, by_id=by_id):
         return True
     else:
         if printErrors:
-            print(f"ERROR: US02: {family.id}: Married {family.married} before birth")
+            print(f"ERROR: FAMILY: US02: {family.id}: Married {family.married} before birth")
         return False
 
 
@@ -73,7 +73,7 @@ def check_born_before_death(indi: individual, printErrors=True):
         return True
     else:
         if printErrors:
-            print(f"ERROR: US03: {indi.id}: Died before birth")
+            print(f"ERROR: INDIVIDUAL: US03: {indi.id}: Died before birth")
 
 def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
@@ -84,7 +84,7 @@ def US04(family, printErrors=True):
 
     if marriage_date > divorce_date:
         if printErrors:
-            print(f"ERROR: US04: {family.id}: Divorced {family.divorced} before married {family.married}")
+            print(f"ERROR: FAMILY: US04: {family.id}: Divorced {family.divorced} before married {family.married}")
         return False
 
     return True
@@ -102,7 +102,7 @@ def US05(family, individuals, printErrors=True):
                 death_date = datetime.strptime(indiv.death, "%d %b %Y")
                 if marriage_date > death_date:
                     if printErrors:
-                        print(f"ERROR: US05: {family.id}: Married {family.married} after death {indiv.death} of individual {indiv.id}")
+                        print(f"ERROR: FAMILY: US05: {family.id}: Married {family.married} after death {indiv.death} of individual {indiv.id}")
                     return False
             if not spouse_ids:  # If we've checked both spouses, we can break early
                 break
@@ -123,7 +123,7 @@ def US06(family, individuals, printErrors=True):
                 death_date = datetime.strptime(i.death, "%d %b %Y")
                 if divorce_date > death_date:
                     if printErrors:
-                        print(f"ERROR: US06: {family.id}: Divorced {family.divorced} after death {i.death} of individual {i.id}")
+                        print(f"ERROR: FAMILY: US06: {family.id}: Divorced {family.divorced} after death {i.death} of individual {i.id}")
                     return False
             if not family_ids:
                 break
@@ -136,7 +136,7 @@ def US08(family, individuals, printErrors = True):
 
     if family.married == "NA" and family.divorced == "NA":
         if printErrors:
-            print(f"ERROR: US08: {family.id}: Had child {family.children[0]} before marriage (unmarried)")
+            print(f"ANOMALY: FAMILY: US08: {family.id}: Had child {family.children[0]} before marriage (unmarried)")
         return False
 
     marriage_date = datetime.strptime(family.married, "%d %b %Y")
@@ -145,7 +145,7 @@ def US08(family, individuals, printErrors = True):
         for i in individuals:
             if c.strip('\'') == i.id and datetime.strptime(i.birthday, "%d %b %Y") < marriage_date:
                 if printErrors:
-                    print(f"ERROR: US08: {family.id}: Had child {c} before marriage {family.married}")
+                    print(f"ANOMALY: FAMILY: US08: {family.id}: Had child {c} before marriage {family.married}")
                 return False
         
     return True
