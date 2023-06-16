@@ -45,6 +45,7 @@ class TestUS02(unittest.TestCase):
         self.family2 = family("F2", "20 JAN 2005", husband_Id="H2", wife_Id="W1")  # No birthday provided for Husband
         self.family3 = family("F3", "30 MAR 2010", husband_Id="H3", wife_Id="W2")  # No birthday for wife, husband born after
         self.family4 = family("F4", "NA", "NA", husband_Id="H1", wife_Id="W2")  # No marriage date
+        self.family5 = family("F5", "10 SEP 2019", "NA", husband_Id="H3", wife_Id="W1")  # Husband born after, wife born before.
         self.by_id = {
             "H1": individual("H1", "Phil", birthday="30 APR 1989"),
             "H2": individual("H2", "Bob", birthday="NA"),
@@ -58,6 +59,7 @@ class TestUS02(unittest.TestCase):
         self.assertTrue(check_born_before_married(self.family2, False, self.by_id))  # No divorce date provided
         self.assertFalse(check_born_before_married(self.family3, False, self.by_id))  # Marriage date is after divorce date
         self.assertTrue(check_born_before_married(self.family4, False, self.by_id))  # Marriage and divorce dates are the same
+        self.assertFalse(check_born_before_married(self.family5, False, self.by_id))  # Marriage and divorce dates are the same
 
 
 class TestUS03(unittest.TestCase):
@@ -72,12 +74,15 @@ class TestUS03(unittest.TestCase):
         self.indi2 = individual("I1", birthday="NA", death="15 MAR 2000")  # no birthday
         self.indi3 = individual("I1", birthday="10 FEB 2010", death="15 MAR 2000")  # born after death
         self.indi4 = individual("I1", birthday="10 FEB 1990", death="NA")  # still alive
+        self.indi5 = individual("I1", birthday="NA", death="NA")  # no birthday no death
 
     def test_birth_before_marriage(self):
         self.assertTrue(check_born_before_death(self.indi1, False))  # born before death
         self.assertTrue(check_born_before_death(self.indi2, False))  # no birthday
         self.assertFalse(check_born_before_death(self.indi3, False))  # born after death
         self.assertTrue(check_born_before_death(self.indi4, False))  # still alive
+        self.assertTrue(check_born_before_death(self.indi5, False))  # still alive
+
 
 
 class TestUS04(unittest.TestCase):
