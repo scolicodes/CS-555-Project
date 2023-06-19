@@ -4,7 +4,7 @@ from prettytable import PrettyTable
 
 
 class individual:
-    def __init__(self, id, name="NA", gender="NA", birthday="NA", age="NA", alive="NA", death="NA", child="NA",
+    def __init__(self, id, name="NA", gender="NA", birthday="NA", age="NA", alive=True, death="NA", child="NA",
                  spouse="NA"):
         self.id = id
         self.name = name
@@ -42,7 +42,6 @@ class family:
 
 by_id = {}
 
-
 # Code for User Stories
 def check_born_before_married(family, printErrors=True, by_id=by_id):
     """Satisfies US02"""
@@ -73,7 +72,7 @@ def check_born_before_death(indi: individual, printErrors=True):
         return True
     else:
         if printErrors:
-            print(f"ERROR: INDIVIDUAL: US03: {indi.id}: Died before birth")
+            print(f"ERROR: INDIVIDUAL: US03: {indi.id}: Died {indi.death} before born {indi.birthday}")
 
 def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
@@ -86,8 +85,8 @@ def US04(family, printErrors=True):
         if printErrors:
             print(f"ERROR: FAMILY: US04: {family.id}: Divorced {family.divorced} before married {family.married}")
         return False
-
     return True
+
 def US05(family, individuals, printErrors=True):
     if family.married == "NA":  # No marriage occurred
         return True
@@ -122,8 +121,12 @@ def US06(family, individuals, printErrors=True):
             if i.death is not None and i.death != "NA":
                 death_date = datetime.strptime(i.death, "%d %b %Y")
                 if divorce_date > death_date:
+                    if i.id == family.husband_Id:
+                        type = "husband's"
+                    else:
+                        type = "wife's"
                     if printErrors:
-                        print(f"ERROR: FAMILY: US06: {family.id}: Divorced {family.divorced} after death {i.death} of individual {i.id}")
+                        print(f"ERROR: FAMILY: US06: {family.id}: Divorced {family.divorced} after {type} ({i.id}) death on {i.death}")
                     return False
             if not family_ids:
                 break
@@ -135,24 +138,25 @@ def US08(family, individuals, printErrors = True):
         return True
 
     if family.married == "NA" and family.divorced == "NA":
+        child = family.children[0].strip('\'')
         if printErrors:
-            print(f"ANOMALY: FAMILY: US08: {family.id}: Had child {family.children[0]} before marriage (unmarried)")
+            print(f"ANOMALY: FAMILY: US08: {family.id}: Child {child} before marriage (unmarried)")
         return False
 
     marriage_date = datetime.strptime(family.married, "%d %b %Y")
     
     for c in family.children:
         for i in individuals:
-            if c.strip('\'') == i.id and datetime.strptime(i.birthday, "%d %b %Y") < marriage_date:
+            c = c.strip('\'')
+            if c == i.id and datetime.strptime(i.birthday, "%d %b %Y") < marriage_date:
                 if printErrors:
-                    print(f"ANOMALY: FAMILY: US08: {family.id}: Had child {c} before marriage {family.married}")
+                    print(f"ANOMALY: FAMILY: US08: {family.id}: Child {c} before marriage on {family.married}")
                 return False
         
     return True
 
-
-def calculate_age(birth_date, death_date=None):
-    if death_date is not None:
+def calculate_age(birth_date, death_date="NA"):
+    if death_date != "NA":
         birth_date_object = datetime.strptime(birth_date, "%d %b %Y").date()
         death_date_object = datetime.strptime(death_date, "%d %b %Y").date()
         age = death_date_object.year - birth_date_object.year
@@ -168,7 +172,6 @@ def calculate_age(birth_date, death_date=None):
                 current_date.month == birth_date_object.month and current_date.day < birth_date_object.day):
             age -= 1
         return age
-
 
 def find_name_for_id(id):
     for individual in individuals:
@@ -191,24 +194,6 @@ valid_tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MAR
 individuals = []
 families = []
 tag = None
-# Individual properties
-individual_Id = None
-name = None
-gender = None
-birthday = None
-age = None
-death = None
-spouse = None
-child = None
-# Family properties
-family_Id = None
-married = None
-divorced = None
-husband_Id = None
-husband_name = None
-wife_Id = None
-wife_name = None
-children = []
 # Loop through each line
 for line in lines:
     line = line.strip()
@@ -223,90 +208,68 @@ for line in lines:
         tag = components.pop(0)
     if tag in valid_tags:
         is_valid = 'Y'
-        # Checks if end of file to add last individual and family
-        if tag == "TRLR":
-            if death is not None:
-                alive = False
-                age = calculate_age(birthday, death)
-            else:
-                alive = True
-                age = calculate_age(birthday)
-            # Saves an individual to the individuals list
-            individuals.append(individual(individual_Id, name, gender, birthday, age, alive, death, child, spouse))
-            # Check if all parameters to create a family are present
-            if all(y is not None for y in (family_Id, married, husband_Id, wife_Id)):
-                if divorced is None:
-                    divorced = "NA"
-                husband_name = find_name_for_id(husband_Id)
-                wife_name = find_name_for_id(wife_Id)
-                # Saves an family to the families list
-                families.append(
-                    family(family_Id, married, divorced, husband_Id, husband_name, wife_Id, wife_name, children))
-        elif level == "0" and tag == "INDI":
-            # Check if all parameters to create an individual are present
-            if all(x is not None for x in (individual_Id, name, gender, birthday)):
-                if death is not None:
-                    alive = False
-                    age = calculate_age(birthday, death)
-                else:
-                    alive = True
-                    age = calculate_age(birthday)
-                # Saves an individual to the individuals list
-                individuals.append(individual(individual_Id, name, gender, birthday, age, alive, death, child, spouse))
-            # Reset Data
-            individual_Id = None
-            name = None
-            gender = None
-            birthday = None
-            age = None
-            death = None
-            spouse = None
-            child = None
-        elif level == "0" and tag == "FAM":
-            # Check if all parameters to create a family are present
-            if all(y is not None for y in (family_Id, married, husband_Id, wife_Id)):
-                if divorced is None:
-                    divorced = "NA"
-                husband_name = find_name_for_id(husband_Id)
-                wife_name = find_name_for_id(wife_Id)
-                # Saves an family to the families list
-                families.append(
-                    family(family_Id, married, divorced, husband_Id, husband_name, wife_Id, wife_name, children))
-            # Reset Data
-            family_Id = None
-            married = None
-            divorced = None
-            husband_Id = None
-            husband_name = None
-            wife_Id = None
-            wife_name = None
-            children = []
-        if tag == "INDI":
+        # Checks if tag is individual
+        if level == "0" and tag == "INDI":
             individual_Id = " ".join(components)
-        elif tag == "NAME":
+            individuals.append(individual(individual_Id))
+        elif level == "0" and tag == "FAM":
+            family_Id = " ".join(components)
+            families.append(family(family_Id))
+        elif level == "1" and tag == "NAME":
             name = " ".join(components)
+            index = len(individuals) - 1
+            individuals[index].name = name
         elif tag == "SEX":
             gender = " ".join(components)
+            index = len(individuals) - 1
+            individuals[index].gender = gender
         elif prev_tag == "BIRT" and tag == "DATE":
             birthday = " ".join(components)
+            index = len(individuals) - 1
+            individuals[index].birthday = birthday
+            individuals[index].age = calculate_age(birthday)
         elif prev_tag == "DEAT" and tag == "DATE":
             death = " ".join(components)
+            index = len(individuals) - 1
+            individuals[index].death = death
+            individuals[index].age = calculate_age(birthday, death)
+            individuals[index].alive = False
         elif tag == "FAMS":
             spouse = " ".join(components)
+            index = len(individuals) - 1
+            individuals[index].spouse = spouse
         elif tag == "FAMC":
             child = " ".join(components)
-        elif tag == "FAM":
-            family_Id = " ".join(components)
+            index = len(individuals) - 1
+            individuals[index].child = child
         elif tag == "HUSB":
             husband_Id = " ".join(components)
+            husband_name = find_name_for_id(husband_Id)
+            index = len(families) - 1
+            families[index].husband_Id = husband_Id
+            families[index].husband_name = husband_name
         elif tag == "WIFE":
             wife_Id = " ".join(components)
+            wife_name = find_name_for_id(wife_Id)
+            index = len(families) - 1
+            families[index].wife_Id = wife_Id
+            families[index].wife_name = wife_name
         elif tag == "CHIL":
-            children.append("'%s'" % (" ".join(components)))
+            index = len(families) - 1
+            current_children = families[index].children
+            if current_children == "NA":
+                current_children = ["'%s'" % (" ".join(components))]
+            else:
+                current_children.append("'%s'" % (" ".join(components)))
+            families[index].children = current_children
         elif prev_tag == "MARR" and tag == "DATE":
             married = " ".join(components)
+            index = len(families) - 1
+            families[index].married = married
         elif prev_tag == "DIV" and tag == "DATE":
             divorced = " ".join(components)
+            index = len(families) - 1
+            families[index].divorced = divorced
     else:
         is_valid = 'N'
     if len(components) != 0:
@@ -322,36 +285,24 @@ by_id.update({indi.id: indi for indi in individuals})
 individuals_table = PrettyTable()
 individuals_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
 for indiv in individuals:
-    if indiv.birthday != None and date_after_current_date(indiv.birthday):
-         print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Birthday {indiv.birthday} occurs in future")
-    if indiv.death != None and date_after_current_date(indiv.death):
+    if indiv.birthday != "NA" and date_after_current_date(indiv.birthday):
+        print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Birthday {indiv.birthday} occurs in future")
+    if indiv.death != "NA" and date_after_current_date(indiv.death):
         print(f"ERROR: INDIVIDUAL US01: {indiv.id}: Death {indiv.death} occurs in future")
     check_born_before_death(indiv)
     if age_over_150(indiv):
-        if indiv.death == None:
+        if indiv.death == "NA":
             print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old - Birth date {indiv.birthday}")
         else:
             print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old at death - Birth date {indiv.birthday}: Death {indiv.death}")
-    if indiv.child is None and indiv.spouse is None:
+    elif indiv.child == "NA":
         individuals_table.add_row(
-            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, "NA", "NA"])
-    elif indiv.child is None:
-        individuals_table.add_row(
-            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, "NA",
+            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, "None",
              "{'%s'}" % indiv.spouse])
-    elif indiv.spouse is None:
-        individuals_table.add_row(
-            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death,
-             "{'%s'}" % indiv.child, "NA"])
-    elif indiv.death is None:
-        individuals_table.add_row(
-            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, "NA",
-             "{'%s'}" % indiv.child, "{'%s'}" % indiv.spouse])
     else:
         individuals_table.add_row(
             [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death,
              "{'%s'}" % indiv.child, "{'%s'}" % indiv.spouse])
-
 # Families Table
 families_table = PrettyTable()
 families_table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name",
@@ -362,13 +313,18 @@ for fam in families:
     US05(fam, individuals)
     US06(fam, individuals)
     US08(fam, individuals)
+    check_born_before_married(fam)
     if fam.married != "NA" and date_after_current_date(fam.married):
         print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
     if fam.divorced != "NA" and date_after_current_date(fam.divorced):
         print(f"ERROR: FAMILY: US01: {fam.id}: Divorce date {fam.divorced} occurs in future")
-    families_table.add_row(
-        [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
-         fam.wife_name, "{%s}" % ",".join(fam.children)])
+    if fam.children != "NA":
+        row = [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
+         fam.wife_name, "{%s}" % ",".join(fam.children)]
+    else:
+        row = [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
+         fam.wife_name, "NA"]
+    families_table.add_row(row)
 # Print Individuals Table
 print()
 print('Individuals')
