@@ -217,59 +217,48 @@ for line in lines:
             families.append(family(family_Id))
         elif level == "1" and tag == "NAME":
             name = " ".join(components)
-            index = len(individuals) - 1
-            individuals[index].name = name
+            individuals[-1].name = name
         elif tag == "SEX":
             gender = " ".join(components)
-            index = len(individuals) - 1
-            individuals[index].gender = gender
+            individuals[-1].gender = gender
         elif prev_tag == "BIRT" and tag == "DATE":
             birthday = " ".join(components)
-            index = len(individuals) - 1
-            individuals[index].birthday = birthday
-            individuals[index].age = calculate_age(birthday)
+            individuals[-1].birthday = birthday
+            individuals[-1].age = calculate_age(birthday)
         elif prev_tag == "DEAT" and tag == "DATE":
             death = " ".join(components)
-            index = len(individuals) - 1
-            individuals[index].death = death
-            individuals[index].age = calculate_age(birthday, death)
-            individuals[index].alive = False
+            individuals[-1].death = death
+            individuals[-1].age = calculate_age(birthday, death)
+            individuals[-1].alive = False
         elif tag == "FAMS":
             spouse = " ".join(components)
-            index = len(individuals) - 1
-            individuals[index].spouse = spouse
+            individuals[-1].spouse = spouse
         elif tag == "FAMC":
             child = " ".join(components)
-            index = len(individuals) - 1
-            individuals[index].child = child
+            individuals[-1].child = child
         elif tag == "HUSB":
             husband_Id = " ".join(components)
             husband_name = find_name_for_id(husband_Id)
-            index = len(families) - 1
-            families[index].husband_Id = husband_Id
-            families[index].husband_name = husband_name
+            families[-1].husband_Id = husband_Id
+            families[-1].husband_name = husband_name
         elif tag == "WIFE":
             wife_Id = " ".join(components)
             wife_name = find_name_for_id(wife_Id)
-            index = len(families) - 1
-            families[index].wife_Id = wife_Id
-            families[index].wife_name = wife_name
+            families[-1].wife_Id = wife_Id
+            families[-1].wife_name = wife_name
         elif tag == "CHIL":
-            index = len(families) - 1
-            current_children = families[index].children
+            current_children = families[-1].children
             if current_children == "NA":
                 current_children = ["'%s'" % (" ".join(components))]
             else:
                 current_children.append("'%s'" % (" ".join(components)))
-            families[index].children = current_children
+            families[-1].children = current_children
         elif prev_tag == "MARR" and tag == "DATE":
             married = " ".join(components)
-            index = len(families) - 1
-            families[index].married = married
+            families[-1].married = married
         elif prev_tag == "DIV" and tag == "DATE":
             divorced = " ".join(components)
-            index = len(families) - 1
-            families[index].divorced = divorced
+            families[-1].divorced = divorced
     else:
         is_valid = 'N'
     if len(components) != 0:
