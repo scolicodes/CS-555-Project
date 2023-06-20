@@ -155,6 +155,38 @@ def US08(family, individuals, printErrors = True):
         
     return True
 
+def US12(family, individuals, printErrors=True):
+    """Mother should be less than 60 years older than her children and
+    father should be less than 80 years older than his children"""
+    flag = True
+
+    if family.children == "NA":
+        return flag
+
+
+    if printErrors:
+        husband_bday = datetime.strptime(by_id[family.husband_Id].birthday, "%d %b %Y")
+        wife_bday = datetime.strptime(by_id[family.wife_Id].birthday, "%d %b %Y")
+    else:
+        husband_bday = datetime.strptime(next((obj for obj in individuals if obj.id == family.husband_Id), None).birthday, "%d %b %Y")
+        wife_bday = datetime.strptime(next((obj for obj in individuals if obj.id == family.wife_Id), None).birthday, "%d %b %Y")
+
+    for child_id in family.children:
+        if printErrors:
+            child_bday = datetime.strptime(by_id[child_id.strip('\'')].birthday, "%d %b %Y")
+        else:
+            child_bday = datetime.strptime(next((obj for obj in individuals if obj.id == child_id), None).birthday, "%d %b %Y")
+        if (child_bday.year - husband_bday.year) > 80:
+            if printErrors:
+                print(f"ERROR: FAMILY: US12: {family.id}: Father {family.husband_Id} is more than 80 years older than child {child_id}")
+            flag = False
+        if (child_bday.year + -wife_bday.year) > 60:
+            if printErrors:
+                print(
+                    f"ERROR: FAMILY: US12: {family.id}: Mother {family.wife_Id} is more than 60 years older than child {child_id}")
+            flag = False
+    return flag
+
 def calculate_age(birth_date, death_date="NA"):
     if death_date != "NA":
         birth_date_object = datetime.strptime(birth_date, "%d %b %Y").date()
@@ -284,7 +316,7 @@ for indiv in individuals:
             print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old - Birth date {indiv.birthday}")
         else:
             print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old at death - Birth date {indiv.birthday}: Death {indiv.death}")
-    elif indiv.child == "NA":
+    if indiv.child == "NA":
         individuals_table.add_row(
             [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, "None",
              "{'%s'}" % indiv.spouse])
@@ -303,6 +335,7 @@ for fam in families:
     US06(fam, individuals)
     US08(fam, individuals)
     check_born_before_married(fam)
+    US12(fam, None)
     if fam.married != "NA" and date_after_current_date(fam.married):
         print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
     if fam.divorced != "NA" and date_after_current_date(fam.divorced):
