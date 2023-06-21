@@ -1,6 +1,7 @@
 import unittest
-from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age, US08, \
-    check_born_before_death, check_born_before_married
+from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age, \
+    US08, \
+    check_born_before_death, check_born_before_married, US12
 
 
 class TestUS01(unittest.TestCase):
@@ -218,6 +219,47 @@ class TestUS08(unittest.TestCase):
         self.assertFalse(US08(self.family3, [self.individual1, self.individual2, self.individual4], False))
         self.assertTrue(US08(self.family4, [self.individual1, self.individual2, self.individual3], False))
         self.assertFalse(US08(self.family5, [self.individual1, self.individual2, self.individual3, self.individual4], False))
+
+
+class TestUS12(unittest.TestCase):
+    """
+    Author: Your Name
+    User Story: US12
+    Sprint: Sprint 1
+    """
+
+    def setUp(self):
+        self.family1 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", children=["I3"])  # Parents are not too old
+        self.family2 = family("F2", "1 JAN 1970", "NA", "I4", "Jack Smith", "I5", "Janet Smith", children=["I6"])  # Father is too old
+        self.family3 = family("F3", "3 MAR 1980", "NA", "I7", "Jerry Smith", "I8", "Jill Smith", children=["I9"])  # Mother is too old
+        self.family4 = family("F4", "12 MAY 1990", "NA", "I10", "Joe Smith", "I11", "Jenny Smith", children=["I12"])  # Both parents are too old
+
+        self.individuals = [
+            individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960"),
+            individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1965"),
+            individual(id="I3", name="Junior Smith", gender="M", birthday="01 JAN 1990"),
+            individual(id="I4", name="Jack Smith", gender="M", birthday="01 JAN 1830"),
+            individual(id="I5", name="Janet Smith", gender="F", birthday="01 JAN 1935"),
+            individual(id="I6", name="Jackie Smith", gender="M", birthday="01 JAN 1990"),
+            individual(id="I7", name="Jerry Smith", gender="M", birthday="01 JAN 1950"),
+            individual(id="I8", name="Jill Smith", gender="F", birthday="01 JAN 1910"),
+            individual(id="I9", name="Jenny Smith", gender="M", birthday="01 JAN 1990"),
+            individual(id="I10", name="Joe Smith", gender="M", birthday="01 JAN 1900"),
+            individual(id="I11", name="Jane Smith", gender="F", birthday="01 JAN 1905"),
+            individual(id="I12", name="Janet Smith", gender="F", birthday="01 JAN 1990"),
+        ]
+
+    def test_parents_not_too_old(self):
+        self.assertTrue(US12(self.family1, self.individuals, False))
+
+    def test_father_too_old(self):
+        self.assertFalse(US12(self.family2, self.individuals, False))
+
+    def test_mother_too_old(self):
+        self.assertFalse(US12(self.family3, self.individuals, False))
+
+    def test_both_parents_too_old(self):
+        self.assertFalse(US12(self.family4, self.individuals, False))
 
 if __name__ == '__main__':
     unittest.main()
