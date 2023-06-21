@@ -74,6 +74,24 @@ def check_born_before_death(indi: individual, printErrors=True):
         if printErrors:
             print(f"ERROR: INDIVIDUAL: US03: {indi.id}: Died {indi.death} before born {indi.birthday}")
 
+def check_male_members_last_name(fam, by_id=by_id, print_errors=True):
+    if fam.children == "NA":
+         return True
+    husband_obj = by_id[fam.husband_Id]
+    husband_name_arr= husband_obj.name.split()
+    husband_last_name = husband_name_arr[-1].strip('/')
+    for child in fam.children:
+        child_id = child.strip('\'')
+        child_obj = by_id[child_id]
+        if child_obj.gender == "M":
+            name_arr= child_obj.name.split()
+            last_name = name_arr[-1].strip('/')
+            if last_name != husband_last_name:
+                if print_errors:
+                    print(f"ERROR: INDIVIDUAL: US16: {child_id}: Last name ({last_name}) does not match parent's ({fam.husband_Id}) last name ({husband_last_name})")
+                return False
+    return True
+
 def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
         return True
@@ -284,14 +302,11 @@ for indiv in individuals:
             print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old - Birth date {indiv.birthday}")
         else:
             print(f"ERROR: INDIVIDUAL US07: {indiv.id}: More than 150 years old at death - Birth date {indiv.birthday}: Death {indiv.death}")
-    elif indiv.child == "NA":
-        individuals_table.add_row(
-            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, "None",
-             "{'%s'}" % indiv.spouse])
-    else:
-        individuals_table.add_row(
-            [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death,
-             "{'%s'}" % indiv.child, "{'%s'}" % indiv.spouse])
+    child_field = "None" if indiv.child == "NA" else "{'%s'}" % indiv.child
+    spouse_field = "NA" if indiv.spouse == "NA" else "{'%s'}" % indiv.spouse
+    individuals_table.add_row(
+        [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
+
 # Families Table
 families_table = PrettyTable()
 families_table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name",
@@ -303,6 +318,7 @@ for fam in families:
     US06(fam, individuals)
     US08(fam, individuals)
     check_born_before_married(fam)
+    check_male_members_last_name(fam)
     if fam.married != "NA" and date_after_current_date(fam.married):
         print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
     if fam.divorced != "NA" and date_after_current_date(fam.divorced):

@@ -1,6 +1,6 @@
 import unittest
 from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age, US08, \
-    check_born_before_death, check_born_before_married
+    check_born_before_death, check_born_before_married, check_male_members_last_name
 
 
 class TestUS01(unittest.TestCase):
@@ -218,6 +218,53 @@ class TestUS08(unittest.TestCase):
         self.assertFalse(US08(self.family3, [self.individual1, self.individual2, self.individual4], False))
         self.assertTrue(US08(self.family4, [self.individual1, self.individual2, self.individual3], False))
         self.assertFalse(US08(self.family5, [self.individual1, self.individual2, self.individual3, self.individual4], False))
+
+class TestUS16(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US16
+    Sprint: Sprint 2
+    """
+
+    def setUp(self):
+        self.family1 = family(id="F1", married="20 OCT 1988", husband_Id="I01", husband_name="James Kern", children=["'I06'", "'I07'"])  # Family with two boys with different last names
+        self.family2 = family(id="F2", married="13 JUN 1977", husband_Id="I02", husband_name="Kevin Burns", children=["'I08'", "'I09'"])  # Family with one boy and one girl with different last names
+        self.family3 = family(id="F3", married="13 JUN 1977", husband_Id="I03", husband_name="Gary Paul", children=["'I10'", "'I11'"])  # Family with two girls with different last names
+        self.family4 = family(id="F4", married="13 JUN 1977", husband_Id="I04", husband_name="Jack Simons", children=["'I12'", "'I13'", "'I14'"])  # Family with three children (two boys and 1 girl) with the males with the same last names
+        self.family5 = family(id="F5", married="13 JUN 1977", husband_Id="I05", husband_name="Jaden Hall", children=["'I15'", "'I16'"])  # Family with two boys one with a different last name
+        self.by_id = {
+            "I01": individual(id="I01", name="James Kern", gender="M"),
+            "I02": individual(id="I02", name="Kevin Burns", gender="M"),
+            "I03": individual(id="I03", name="Gary Paul", gender="M"),
+            "I04": individual(id="I04", name="Jack Simons", gender="M"),
+            "I05": individual(id="I05", name="Jaden Hall", gender="M"),
+            "I06": individual(id="I06", name="Johnathan Rubio", gender="M"),
+            "I07": individual(id="I07", name="Ryan Rubio", gender="M"),
+            "I08": individual(id="I08", name="Joel Norman", gender="M"),
+            "I09": individual(id="I09", name="Harper Norman", gender="F"),
+            "I10": individual(id="I10", name="Lily Key", gender="F"),
+            "I11": individual(id="I11", name="Brooks Pollard", gender="F"),
+            "I12": individual(id="I12", name="Dominic Simons", gender="M"),
+            "I13": individual(id="I13", name="Annabelle Roth", gender="F"),
+            "I14": individual(id="I14", name="Justin Simons", gender="M"),
+            "I15": individual(id="I15", name="Allan Hall", gender="M"),
+            "I16": individual(id="I16", name="Brandon Newman", gender="M"),
+        }
+
+    def test_two_male_children_with_different_last_names(self):
+        self.assertFalse(check_male_members_last_name(self.family1, self.by_id, print_errors=False))
+    
+    def test_one_male_child_and_one_female_child_with_different_last_names(self):
+        self.assertFalse(check_male_members_last_name(self.family2, self.by_id, print_errors=False))
+
+    def test_two_female_children_with_different_last_names(self):
+        self.assertTrue(check_male_members_last_name(self.family3, self.by_id, print_errors=False))
+    
+    def test_two_male_and_one_female_children_with_males_same_last_names(self):
+        self.assertTrue(check_male_members_last_name(self.family4, self.by_id, print_errors=False))
+    
+    def test_two_male_children_one_with_different_last_name(self):
+        self.assertFalse(check_male_members_last_name(self.family5, self.by_id, print_errors=False))
 
 if __name__ == '__main__':
     unittest.main()
