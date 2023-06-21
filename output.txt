@@ -114,14 +114,14 @@
 <-- 1|FAMC|Y|@F1@
 --> 0 @I5@ INDI
 <-- 0|INDI|Y|@I5@
---> 1 NAME Marvin /Fowler/
-<-- 1|NAME|Y|Marvin /Fowler/
+--> 1 NAME Marvin /Kelley/
+<-- 1|NAME|Y|Marvin /Kelley/
 --> 2 GIVN Marvin
 <-- 2|GIVN|N|Marvin
---> 2 SURN Fowler
-<-- 2|SURN|N|Fowler
---> 2 _MARNM Fowler
-<-- 2|_MARNM|N|Fowler
+--> 2 SURN Kelley
+<-- 2|SURN|N|Kelley
+--> 2 _MARNM Kelley
+<-- 2|_MARNM|N|Kelley
 --> 1 SEX M
 <-- 1|SEX|Y|M
 --> 1 BIRT
@@ -672,6 +672,9 @@ ERROR: INDIVIDUAL US01: @I24@: Birthday 7 MAR 2025 occurs in future
 ERROR: FAMILY: US05: @F1@: Married 27 MAR 1938 after death 4 OCT 1918 of individual @I1@
 ANOMALY: FAMILY: US08: @F1@: Child @I3@ before marriage on 27 MAR 1938
 ERROR: FAMILY: US02: @F1@: Married 27 MAR 1938 before birth
+ERROR: INDIVIDUAL: US16: @I5@: Last name (Kelley) does not match parent's (@I1@) last name (Fowler)
+ERROR: INDIVIDUAL: US16: @I19@: Last name (Fowler) does not match parent's (@I5@) last name (Kelley)
+ERROR: INDIVIDUAL: US16: @I20@: Last name (Fowler) does not match parent's (@I5@) last name (Kelley)
 ERROR: FAMILY: US06: @F6@: Divorced 2 NOV 2000 after husband's (@I25@) death on 13 JUN 1995
 
 Individuals
@@ -680,26 +683,28 @@ Individuals
 +-------+-------------------+--------+-------------+-----+-------+-------------+----------+----------+
 |  @I1@ |  Harvey /Fowler/  |   M    | 17 JUN 1920 |  -2 | False |  4 OCT 1918 |   None   | {'@F1@'} |
 |  @I2@ |   Sidney /Keys/   |   F    |  7 MAR 1940 |  70 | False | 29 APR 2010 |   None   | {'@F1@'} |
+|  @I3@ |  Ashley /Fowler/  |   F    | 12 NOV 1870 | 152 |  True |      NA     | {'@F1@'} | {'@F2@'} |
 |  @I4@ |   Mason /Fowler/  |   M    | 15 DEC 1947 |  75 |  True |      NA     | {'@F1@'} | {'@F4@'} |
-|  @I5@ |  Marvin /Fowler/  |   M    | 10 SEP 1949 |  73 |  True |      NA     | {'@F1@'} | {'@F5@'} |
+|  @I5@ |  Marvin /Kelley/  |   M    | 10 SEP 1949 |  73 |  True |      NA     | {'@F1@'} | {'@F5@'} |
 |  @I6@ |   Tracy /Fowler/  |   F    |  5 FEB 1951 |  72 |  True |      NA     | {'@F1@'} | {'@F6@'} |
-|  @I8@ |   Paul /Collins/  |   M    | 12 MAY 1970 |  53 |  True |      NA     | {'@F2@'} |  {'NA'}  |
+|  @I7@ |   Troy /Collins/  |   M    | 30 JUL 1942 | 152 | False | 25 MAY 2095 |   None   | {'@F2@'} |
+|  @I8@ |   Paul /Collins/  |   M    | 12 MAY 1970 |  53 |  True |      NA     | {'@F2@'} |    NA    |
 |  @I9@ |  Carly /Collins/  |   F    | 16 SEP 1975 |  47 |  True |      NA     | {'@F2@'} | {'@F7@'} |
 | @I10@ |  Garret /Mullins/ |   M    | 13 NOV 1977 |  45 |  True |      NA     |   None   | {'@F7@'} |
-| @I11@ |  Casey /Mullins/  |   F    | 17 NOV 2005 |  17 |  True |      NA     | {'@F7@'} |  {'NA'}  |
-| @I12@ |  Stacy /Mullins/  |   F    |  8 AUG 2006 |  16 |  True |      NA     | {'@F7@'} |  {'NA'}  |
+| @I11@ |  Casey /Mullins/  |   F    | 17 NOV 2005 |  17 |  True |      NA     | {'@F7@'} |    NA    |
+| @I12@ |  Stacy /Mullins/  |   F    |  8 AUG 2006 |  16 |  True |      NA     | {'@F7@'} |    NA    |
 | @I13@ | Madison /Roberts/ |   F    |  9 NOV 1945 |  77 | False | 13 JUN 2023 |   None   | {'@F4@'} |
-| @I14@ |   Stacy /Fowler/  |   F    | 22 OCT 1969 |  53 |  True |      NA     | {'@F4@'} |  {'NA'}  |
-| @I15@ |   Nick /Fowler/   |   M    | 16 JUN 1970 |  53 |  True |      NA     | {'@F4@'} |  {'NA'}  |
+| @I14@ |   Stacy /Fowler/  |   F    | 22 OCT 1969 |  53 |  True |      NA     | {'@F4@'} |    NA    |
+| @I15@ |   Nick /Fowler/   |   M    | 16 JUN 1970 |  53 |  True |      NA     | {'@F4@'} |    NA    |
 | @I16@ | Ellen /Valentine/ |   F    |  8 MAY 1951 |  72 |  True |      NA     |   None   | {'@F3@'} |
-| @I17@ |   Evan /Fowler/   |   M    | 27 MAY 1982 |  41 |  True |      NA     | {'@F3@'} |  {'NA'}  |
+| @I17@ |   Evan /Fowler/   |   M    | 27 MAY 1982 |  41 |  True |      NA     | {'@F3@'} |    NA    |
 | @I18@ |   Allison /Gill/  |   F    |  5 NOV 1949 |  73 |  True |      NA     |   None   | {'@F5@'} |
 | @I19@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |      NA     | {'@F5@'} | {'@F8@'} |
-| @I20@ |  William /Fowler/ |   M    | 10 AUG 1980 |  42 |  True |      NA     | {'@F5@'} |  {'NA'}  |
-| @I21@ |  Lindsey /Fowler/ |   F    |  8 OCT 1981 |  41 |  True |      NA     | {'@F5@'} |  {'NA'}  |
+| @I20@ |  William /Fowler/ |   M    | 10 AUG 1980 |  42 |  True |      NA     | {'@F5@'} |    NA    |
+| @I21@ |  Lindsey /Fowler/ |   F    |  8 OCT 1981 |  41 |  True |      NA     | {'@F5@'} |    NA    |
 | @I22@ |  Harley /Turner/  |   F    | 14 SEP 1977 |  45 |  True |      NA     |   None   | {'@F8@'} |
-| @I23@ |   Steve /Fowler/  |   M    |  7 MAY 1999 |  24 |  True |      NA     | {'@F8@'} |  {'NA'}  |
-| @I24@ |  Payton /Fowler/  |   M    |  7 MAR 2025 |  -2 |  True |      NA     | {'@F8@'} |  {'NA'}  |
+| @I23@ |   Steve /Fowler/  |   M    |  7 MAY 1999 |  24 |  True |      NA     | {'@F8@'} |    NA    |
+| @I24@ |  Payton /Fowler/  |   M    |  7 MAR 2025 |  -2 |  True |      NA     | {'@F8@'} |    NA    |
 | @I25@ |    Gary /Smith/   |   M    | 15 APR 1950 |  45 | False | 13 JUN 1995 |   None   | {'@F6@'} |
 +-------+-------------------+--------+-------------+-----+-------+-------------+----------+----------+
 
@@ -711,7 +716,7 @@ Families
 | @F2@ | 15 JUL 1967 |     NA     |    @I7@    |  Troy /Collins/  |   @I3@  |  Ashley /Fowler/  |        {'@I8@','@I9@'}        |
 | @F3@ | 15 JAN 1980 |     NA     |    @I4@    |  Mason /Fowler/  |  @I16@  | Ellen /Valentine/ |           {'@I17@'}           |
 | @F4@ |  7 JUL 1967 |     NA     |    @I4@    |  Mason /Fowler/  |  @I13@  | Madison /Roberts/ |       {'@I14@','@I15@'}       |
-| @F5@ | 18 OCT 1972 |     NA     |    @I5@    | Marvin /Fowler/  |  @I18@  |   Allison /Gill/  |   {'@I19@','@I20@','@I21@'}   |
+| @F5@ | 18 OCT 1972 |     NA     |    @I5@    | Marvin /Kelley/  |  @I18@  |   Allison /Gill/  |   {'@I19@','@I20@','@I21@'}   |
 | @F6@ |  6 APR 1982 | 2 NOV 2000 |   @I25@    |   Gary /Smith/   |   @I6@  |   Tracy /Fowler/  |               NA              |
 | @F7@ |  9 JUL 2003 |     NA     |   @I10@    | Garret /Mullins/ |   @I9@  |  Carly /Collins/  |       {'@I11@','@I12@'}       |
 | @F8@ | 10 FEB 1998 |     NA     |   @I19@    |  Pete /Fowler/   |  @I22@  |  Harley /Turner/  |       {'@I23@','@I24@'}       |
