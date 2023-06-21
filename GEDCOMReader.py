@@ -77,6 +77,7 @@ def check_born_before_death(indi: individual, printErrors=True):
 def check_male_members_last_name(fam, by_id=by_id, print_errors=True):
     if fam.children == "NA":
          return True
+    last_names_match = True
     husband_obj = by_id[fam.husband_Id]
     husband_name_arr= husband_obj.name.split()
     husband_last_name = husband_name_arr[-1].strip('/')
@@ -89,8 +90,8 @@ def check_male_members_last_name(fam, by_id=by_id, print_errors=True):
             if last_name != husband_last_name:
                 if print_errors:
                     print(f"ERROR: INDIVIDUAL: US16: {child_id}: Last name ({last_name}) does not match parent's ({fam.husband_Id}) last name ({husband_last_name})")
-                return False
-    return True
+                last_names_match = False
+    return last_names_match
 
 def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
