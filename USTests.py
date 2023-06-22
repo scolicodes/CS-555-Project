@@ -1,6 +1,5 @@
 import unittest
-from GEDCOMReader import family, individual, US04, US05, US06, date_after_current_date, age_over_150, calculate_age, US08, \
-    check_born_before_death, check_born_before_married, check_male_members_last_name, US12
+from GEDCOMReader import *
 
 
 class TestUS01(unittest.TestCase):
@@ -11,11 +10,11 @@ class TestUS01(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family(id="F1", married="20 OCT 1988", husband_Id="I04", husband_name="James Kern", wife_Id="I05", wife_name="Sara Keller")  # Marriage date before current date
-        self.family2 = family(id="F2", married="13 JUN 1977", husband_Id="I06", husband_name="Kevin Burns", wife_Id="I07", wife_name="Jackie Parker", divorced="20 APR 2001")  # Divorce date before current date
-        self.individual1 = individual(id="I01", name="Helen Klien", birthday="11 JAN 1998", age=25, alive=True)  # Birthday date before current date
-        self.individual2 = individual(id="I02", name="Mary Freeman", birthday="22 OCT 1944", age=79, alive=False, death="2 SEP 2010")  # Death date before current date
-        self.individual3 = individual(id="I03", name="Fred Green", birthday="15 NOV 2023", age=0)  # Birthday date after current date
+        self.family1 = Family(id="F1", married="20 OCT 1988", husband_id="I04", husband_name="James Kern", wife_id="I05", wife_name="Sara Keller")  # Marriage date before current date
+        self.family2 = Family(id="F2", married="13 JUN 1977", husband_id="I06", husband_name="Kevin Burns", wife_id="I07", wife_name="Jackie Parker", divorced="20 APR 2001")  # Divorce date before current date
+        self.individual1 = Individual(id="I01", name="Helen Klien", birthday="11 JAN 1998", age=25, alive=True)  # Birthday date before current date
+        self.individual2 = Individual(id="I02", name="Mary Freeman", birthday="22 OCT 1944", age=79, alive=False, death="2 SEP 2010")  # Death date before current date
+        self.individual3 = Individual(id="I03", name="Fred Green", birthday="15 NOV 2023", age=0)  # Birthday date after current date
 
     def test_marriage_date_before_current_date(self):
         self.assertFalse(date_after_current_date(self.family1.married))
@@ -41,17 +40,17 @@ class TestUS02(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family("F1", "10 FEB 1990", husband_Id="H1", wife_Id="W1")  # husband born before
-        self.family2 = family("F2", "20 JAN 2005", husband_Id="H2", wife_Id="W1")  # No birthday provided for Husband
-        self.family3 = family("F3", "30 MAR 2010", husband_Id="H3", wife_Id="W2")  # No birthday for wife, husband born after
-        self.family4 = family("F4", "NA", "NA", husband_Id="H1", wife_Id="W2")  # No marriage date
-        self.family5 = family("F5", "10 SEP 2019", "NA", husband_Id="H3", wife_Id="W1")  # Husband born after, wife born before.
+        self.family1 = Family("F1", "10 FEB 1990", husband_id="H1", wife_id="W1")  # husband born before
+        self.family2 = Family("F2", "20 JAN 2005", husband_id="H2", wife_id="W1")  # No birthday provided for Husband
+        self.family3 = Family("F3", "30 MAR 2010", husband_id="H3", wife_id="W2")  # No birthday for wife, husband born after
+        self.family4 = Family("F4", "NA", "NA", husband_id="H1", wife_id="W2")  # No marriage date
+        self.family5 = Family("F5", "10 SEP 2019", "NA", husband_id="H3", wife_id="W1")  # Husband born after, wife born before.
         self.by_id = {
-            "H1": individual("H1", "Phil", birthday="30 APR 1989"),
-            "H2": individual("H2", "Bob", birthday="NA"),
-            "H3": individual("H3", "Jeff", birthday="30 MAY 2020"),
-            "W1": individual("W1", "Sharon", birthday="20 MAR 1987"),
-            "W2": individual("W2", "Karen", birthday="30 APR 1989")
+            "H1": Individual("H1", "Phil", birthday="30 APR 1989"),
+            "H2": Individual("H2", "Bob", birthday="NA"),
+            "H3": Individual("H3", "Jeff", birthday="30 MAY 2020"),
+            "W1": Individual("W1", "Sharon", birthday="20 MAR 1987"),
+            "W2": Individual("W2", "Karen", birthday="30 APR 1989")
         }
 
     def test_birth_before_marriage(self):
@@ -70,11 +69,11 @@ class TestUS03(unittest.TestCase):
     """
 
     def setUp(self):
-        self.indi1 = individual("I1", birthday="10 FEB 1990", death="15 MAR 2000")  # born before death
-        self.indi2 = individual("I1", birthday="NA", death="15 MAR 2000")  # no birthday
-        self.indi3 = individual("I1", birthday="10 FEB 2010", death="15 MAR 2000")  # born after death
-        self.indi4 = individual("I1", birthday="10 FEB 1990", death="NA")  # still alive
-        self.indi5 = individual("I1", birthday="NA", death="NA")  # no birthday no death
+        self.indi1 = Individual("I1", birthday="10 FEB 1990", death="15 MAR 2000")  # born before death
+        self.indi2 = Individual("I1", birthday="NA", death="15 MAR 2000")  # no birthday
+        self.indi3 = Individual("I1", birthday="10 FEB 2010", death="15 MAR 2000")  # born after death
+        self.indi4 = Individual("I1", birthday="10 FEB 1990", death="NA")  # still alive
+        self.indi5 = Individual("I1", birthday="NA", death="NA")  # no birthday no death
 
     def test_birth_before_marriage(self):
         self.assertTrue(check_born_before_death(self.indi1, False))  # born before death
@@ -93,11 +92,11 @@ class TestUS04(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family("F1", "10 FEB 1990", "15 MAR 2000")  # Marriage date is before divorce date
-        self.family2 = family("F2", "20 JAN 2005", "NA")  # No divorce date provided
-        self.family3 = family("F3", "30 MAR 2010", "15 MAR 2005")  # Marriage date is after divorce date
-        self.family4 = family("F4", "15 APR 2000", "15 APR 2000")  # Married and divorced on the same day
-        self.family5 = family("F5", "NA", "NA")  # No marriage or divorce dates provided
+        self.family1 = Family("F1", "10 FEB 1990", "15 MAR 2000")  # Marriage date is before divorce date
+        self.family2 = Family("F2", "20 JAN 2005", "NA")  # No divorce date provided
+        self.family3 = Family("F3", "30 MAR 2010", "15 MAR 2005")  # Marriage date is after divorce date
+        self.family4 = Family("F4", "15 APR 2000", "15 APR 2000")  # Married and divorced on the same day
+        self.family5 = Family("F5", "NA", "NA")  # No marriage or divorce dates provided
 
     def test_marriage_before_divorce(self):
         self.assertTrue(US04(self.family1, False))  # Marriage date is before divorce date
@@ -115,15 +114,15 @@ class TestUS05(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family("F1", "10 FEB 1990", "NA", "I3", "Michael Scoli", "I4", "Emily Scoli")  # Both alive
-        self.family2 = family("F2", "20 JAN 2005", "NA", "I1", "John Smith", "I4", "Emily Scoli")  # Husband deceased but married before death
-        self.family3 = family("F3", "30 MAR 1995", "NA", "I3", "Michael Scoli", "I2", "Jane Smith")  # Wife deceased but married before death
-        self.family4 = family("F4", "20 MAR 2000", "NA", "I1", "John Smith", "I4", "Emily Scoli")  # Husband deceased and married after death
-        self.family5 = family("F5", "20 MAR 2000", "NA", "I3", "Michael Scoli", "I2", "Jane Smith")  # Wife deceased and married after death
-        self.individual1 = individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960", death="15 MAR 1999")
-        self.individual2 = individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1970", death="15 MAR 1999")
-        self.individual3 = individual(id="I3", name="Michael Scoli", gender="M", birthday="01 JAN 1975", death="NA")
-        self.individual4 = individual(id="I4", name="Emily Scoli", gender="F", birthday="01 JAN 1980", death="NA")
+        self.family1 = Family("F1", "10 FEB 1990", "NA", "I3", "Michael Scoli", "I4", "Emily Scoli")  # Both alive
+        self.family2 = Family("F2", "20 JAN 2005", "NA", "I1", "John Smith", "I4", "Emily Scoli")  # Husband deceased but married before death
+        self.family3 = Family("F3", "30 MAR 1995", "NA", "I3", "Michael Scoli", "I2", "Jane Smith")  # Wife deceased but married before death
+        self.family4 = Family("F4", "20 MAR 2000", "NA", "I1", "John Smith", "I4", "Emily Scoli")  # Husband deceased and married after death
+        self.family5 = Family("F5", "20 MAR 2000", "NA", "I3", "Michael Scoli", "I2", "Jane Smith")  # Wife deceased and married after death
+        self.individual1 = Individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960", death="15 MAR 1999")
+        self.individual2 = Individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1970", death="15 MAR 1999")
+        self.individual3 = Individual(id="I3", name="Michael Scoli", gender="M", birthday="01 JAN 1975", death="NA")
+        self.individual4 = Individual(id="I4", name="Emily Scoli", gender="F", birthday="01 JAN 1980", death="NA")
         self.individuals = [self.individual1, self.individual2, self.individual3, self.individual4]
 
     def test_marriage_before_death(self):
@@ -141,15 +140,15 @@ class TestUS06(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family("F1", "15 JUN 1995", "12 DEC 2007", "I3", "John Smith", "I4", "Jane Smith")  # Both alive and divorced
-        self.family2 = family("F2", "1 JAN 1990", "10 OCT 1997", "I1", "Jack Smith", "I4", "Jane Smith")  # Husband deceased but divorced before death
-        self.family3 = family("F3", "3 MAR 1991", "8 AUG 1994", "I3", "John Smith", "I2", "Jill Smith")  # Wife deceased but divorced before death
-        self.family4 = family("F4", "12 MAY 1992", "24 SEP 2001", "I1", "Jack Smith", "I4", "Jane Smith")  # Husband deceased and divorced after death
-        self.family5 = family("F5", "28 MAR 1990", "10 FEB 2003", "I3", "John Smith", "I2", "Jill Smith")  # Wife deceased and divorced after death
-        self.individual1 = individual(id="I1", name="Jack Smith", gender="M", birthday="01 JAN 1960", death="5 JUL 1999")
-        self.individual2 = individual(id="I2", name="Jill Smith", gender="F", birthday="01 JAN 1970", death="1 MAR 1999")
-        self.individual3 = individual(id="I3", name="John Smith", gender="M", birthday="01 JAN 1970", death="NA")
-        self.individual4 = individual(id="I4", name="Jane Smith", gender="F", birthday="01 JAN 1975", death="NA")
+        self.family1 = Family("F1", "15 JUN 1995", "12 DEC 2007", "I3", "John Smith", "I4", "Jane Smith")  # Both alive and divorced
+        self.family2 = Family("F2", "1 JAN 1990", "10 OCT 1997", "I1", "Jack Smith", "I4", "Jane Smith")  # Husband deceased but divorced before death
+        self.family3 = Family("F3", "3 MAR 1991", "8 AUG 1994", "I3", "John Smith", "I2", "Jill Smith")  # Wife deceased but divorced before death
+        self.family4 = Family("F4", "12 MAY 1992", "24 SEP 2001", "I1", "Jack Smith", "I4", "Jane Smith")  # Husband deceased and divorced after death
+        self.family5 = Family("F5", "28 MAR 1990", "10 FEB 2003", "I3", "John Smith", "I2", "Jill Smith")  # Wife deceased and divorced after death
+        self.individual1 = Individual(id="I1", name="Jack Smith", gender="M", birthday="01 JAN 1960", death="5 JUL 1999")
+        self.individual2 = Individual(id="I2", name="Jill Smith", gender="F", birthday="01 JAN 1970", death="1 MAR 1999")
+        self.individual3 = Individual(id="I3", name="John Smith", gender="M", birthday="01 JAN 1970", death="NA")
+        self.individual4 = Individual(id="I4", name="Jane Smith", gender="F", birthday="01 JAN 1975", death="NA")
         self.individuals = [self.individual1, self.individual2, self.individual3, self.individual4]
 
     def test_divorce_before_death(self):
@@ -167,11 +166,11 @@ class TestUS07(unittest.TestCase):
     """
 
     def setUp(self):
-        self.individual1 = individual(id="I01", name="Gary Burger", birthday="11 JUL 1720", alive=True) # Living and older than 150 years
-        self.individual2 = individual(id="I02", name="Sara Gallegher", birthday="11 NOV 1740", alive=False, death="21 OCT 1895") # Not living but died over 150 years old
-        self.individual3 = individual(id="I03", name="Jalen Bass", birthday="2 NOV 1998", alive=False, death="10 DEC 2011") # Not living but died under 150 years old
-        self.individual4 = individual(id="I04", name="Isabel Mullen", birthday="2 NOV 1998", alive=True) # Living and 25 years old
-        self.individual5 = individual(id="I05", name="Ashley Lawrence", birthday="22 MAY 1913", alive=True) # Living and 110 years old
+        self.individual1 = Individual(id="I01", name="Gary Burger", birthday="11 JUL 1720", alive=True) # Living and older than 150 years
+        self.individual2 = Individual(id="I02", name="Sara Gallegher", birthday="11 NOV 1740", alive=False, death="21 OCT 1895") # Not living but died over 150 years old
+        self.individual3 = Individual(id="I03", name="Jalen Bass", birthday="2 NOV 1998", alive=False, death="10 DEC 2011") # Not living but died under 150 years old
+        self.individual4 = Individual(id="I04", name="Isabel Mullen", birthday="2 NOV 1998", alive=True) # Living and 25 years old
+        self.individual5 = Individual(id="I05", name="Ashley Lawrence", birthday="22 MAY 1913", alive=True) # Living and 110 years old
 
     def test_living_and_older_than_150(self):
         self.individual1.age = calculate_age(self.individual1.birthday)
@@ -201,15 +200,15 @@ class TestUS08(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I3"])  # Married and had a child after marriage
-        self.family2 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Gets married and never had a child
-        self.family3 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I4"])  # Had a child a year before marriage
-        self.family4 = family("F1", "15 JUN 1995", "15 JUNE 1998", "I1", "John Smith", "I2", "Jane Smith", ["I3"])  # Get married, have a child, then divorce
-        self.family5 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I3", "I4"])  # Had a child, got married, then had another child
-        self.individual1 = individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960", death="5 JUL 2020")
-        self.individual2 = individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1970", death="1 MAR 2020")
-        self.individual3 = individual(id="I3", name="Jack Smith", gender="M", birthday="01 JAN 1996", death="NA")
-        self.individual4 = individual(id="I4", name="Jill Smith", gender="F", birthday="01 JAN 1993", death="NA")
+        self.family1 = Family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I3"])  # Married and had a child after marriage
+        self.family2 = Family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Gets married and never had a child
+        self.family3 = Family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I4"])  # Had a child a year before marriage
+        self.family4 = Family("F1", "15 JUN 1995", "15 JUNE 1998", "I1", "John Smith", "I2", "Jane Smith", ["I3"])  # Get married, have a child, then divorce
+        self.family5 = Family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", ["I3", "I4"])  # Had a child, got married, then had another child
+        self.individual1 = Individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960", death="5 JUL 2020")
+        self.individual2 = Individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1970", death="1 MAR 2020")
+        self.individual3 = Individual(id="I3", name="Jack Smith", gender="M", birthday="01 JAN 1996", death="NA")
+        self.individual4 = Individual(id="I4", name="Jill Smith", gender="F", birthday="01 JAN 1993", death="NA")
         self.individuals = [self.individual1, self.individual2, self.individual3, self.individual4]
 
     def test_marriage_before_birth(self):
@@ -228,28 +227,28 @@ class TestUS16(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family(id="F1", married="20 OCT 1988", husband_Id="I01", husband_name="James Kern", children=["'I06'", "'I07'"])  # Family with two boys with different last names
-        self.family2 = family(id="F2", married="13 JUN 1977", husband_Id="I02", husband_name="Kevin Burns", children=["'I08'", "'I09'"])  # Family with one boy and one girl with different last names
-        self.family3 = family(id="F3", married="13 JUN 1977", husband_Id="I03", husband_name="Gary Paul", children=["'I10'", "'I11'"])  # Family with two girls with different last names
-        self.family4 = family(id="F4", married="13 JUN 1977", husband_Id="I04", husband_name="Jack Simons", children=["'I12'", "'I13'", "'I14'"])  # Family with three children (two boys and 1 girl) with the males with the same last names
-        self.family5 = family(id="F5", married="13 JUN 1977", husband_Id="I05", husband_name="Jaden Hall", children=["'I15'", "'I16'"])  # Family with two boys one with a different last name
+        self.family1 = Family(id="F1", married="20 OCT 1988", husband_id="I01", husband_name="James Kern", children=["'I06'", "'I07'"])  # Family with two boys with different last names
+        self.family2 = Family(id="F2", married="13 JUN 1977", husband_id="I02", husband_name="Kevin Burns", children=["'I08'", "'I09'"])  # Family with one boy and one girl with different last names
+        self.family3 = Family(id="F3", married="13 JUN 1977", husband_id="I03", husband_name="Gary Paul", children=["'I10'", "'I11'"])  # Family with two girls with different last names
+        self.family4 = Family(id="F4", married="13 JUN 1977", husband_id="I04", husband_name="Jack Simons", children=["'I12'", "'I13'", "'I14'"])  # Family with three children (two boys and 1 girl) with the males with the same last names
+        self.family5 = Family(id="F5", married="13 JUN 1977", husband_id="I05", husband_name="Jaden Hall", children=["'I15'", "'I16'"])  # Family with two boys one with a different last name
         self.by_id = {
-            "I01": individual(id="I01", name="James Kern", gender="M"),
-            "I02": individual(id="I02", name="Kevin Burns", gender="M"),
-            "I03": individual(id="I03", name="Gary Paul", gender="M"),
-            "I04": individual(id="I04", name="Jack Simons", gender="M"),
-            "I05": individual(id="I05", name="Jaden Hall", gender="M"),
-            "I06": individual(id="I06", name="Johnathan Rubio", gender="M"),
-            "I07": individual(id="I07", name="Ryan Rubio", gender="M"),
-            "I08": individual(id="I08", name="Joel Norman", gender="M"),
-            "I09": individual(id="I09", name="Harper Norman", gender="F"),
-            "I10": individual(id="I10", name="Lily Key", gender="F"),
-            "I11": individual(id="I11", name="Brooks Pollard", gender="F"),
-            "I12": individual(id="I12", name="Dominic Simons", gender="M"),
-            "I13": individual(id="I13", name="Annabelle Roth", gender="F"),
-            "I14": individual(id="I14", name="Justin Simons", gender="M"),
-            "I15": individual(id="I15", name="Allan Hall", gender="M"),
-            "I16": individual(id="I16", name="Brandon Newman", gender="M"),
+            "I01": Individual(id="I01", name="James Kern", gender="M"),
+            "I02": Individual(id="I02", name="Kevin Burns", gender="M"),
+            "I03": Individual(id="I03", name="Gary Paul", gender="M"),
+            "I04": Individual(id="I04", name="Jack Simons", gender="M"),
+            "I05": Individual(id="I05", name="Jaden Hall", gender="M"),
+            "I06": Individual(id="I06", name="Johnathan Rubio", gender="M"),
+            "I07": Individual(id="I07", name="Ryan Rubio", gender="M"),
+            "I08": Individual(id="I08", name="Joel Norman", gender="M"),
+            "I09": Individual(id="I09", name="Harper Norman", gender="F"),
+            "I10": Individual(id="I10", name="Lily Key", gender="F"),
+            "I11": Individual(id="I11", name="Brooks Pollard", gender="F"),
+            "I12": Individual(id="I12", name="Dominic Simons", gender="M"),
+            "I13": Individual(id="I13", name="Annabelle Roth", gender="F"),
+            "I14": Individual(id="I14", name="Justin Simons", gender="M"),
+            "I15": Individual(id="I15", name="Allan Hall", gender="M"),
+            "I16": Individual(id="I16", name="Brandon Newman", gender="M"),
         }
 
     def test_two_male_children_with_different_last_names(self):
@@ -276,24 +275,24 @@ class TestUS12(unittest.TestCase):
     """
 
     def setUp(self):
-        self.family1 = family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", children=["I3"])  # Parents are not too old
-        self.family2 = family("F2", "1 JAN 1970", "NA", "I4", "Jack Smith", "I5", "Janet Smith", children=["I6"])  # Father is too old
-        self.family3 = family("F3", "3 MAR 1980", "NA", "I7", "Jerry Smith", "I8", "Jill Smith", children=["I9"])  # Mother is too old
-        self.family4 = family("F4", "12 MAY 1990", "NA", "I10", "Joe Smith", "I11", "Jenny Smith", children=["I12"])  # Both parents are too old
+        self.family1 = Family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith", children=["I3"])  # Parents are not too old
+        self.family2 = Family("F2", "1 JAN 1970", "NA", "I4", "Jack Smith", "I5", "Janet Smith", children=["I6"])  # Father is too old
+        self.family3 = Family("F3", "3 MAR 1980", "NA", "I7", "Jerry Smith", "I8", "Jill Smith", children=["I9"])  # Mother is too old
+        self.family4 = Family("F4", "12 MAY 1990", "NA", "I10", "Joe Smith", "I11", "Jenny Smith", children=["I12"])  # Both parents are too old
 
         self.individuals = [
-            individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960"),
-            individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1965"),
-            individual(id="I3", name="Junior Smith", gender="M", birthday="01 JAN 1990"),
-            individual(id="I4", name="Jack Smith", gender="M", birthday="01 JAN 1830"),
-            individual(id="I5", name="Janet Smith", gender="F", birthday="01 JAN 1935"),
-            individual(id="I6", name="Jackie Smith", gender="M", birthday="01 JAN 1990"),
-            individual(id="I7", name="Jerry Smith", gender="M", birthday="01 JAN 1950"),
-            individual(id="I8", name="Jill Smith", gender="F", birthday="01 JAN 1910"),
-            individual(id="I9", name="Jenny Smith", gender="M", birthday="01 JAN 1990"),
-            individual(id="I10", name="Joe Smith", gender="M", birthday="01 JAN 1900"),
-            individual(id="I11", name="Jane Smith", gender="F", birthday="01 JAN 1905"),
-            individual(id="I12", name="Janet Smith", gender="F", birthday="01 JAN 1990"),
+            Individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960"),
+            Individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1965"),
+            Individual(id="I3", name="Junior Smith", gender="M", birthday="01 JAN 1990"),
+            Individual(id="I4", name="Jack Smith", gender="M", birthday="01 JAN 1830"),
+            Individual(id="I5", name="Janet Smith", gender="F", birthday="01 JAN 1935"),
+            Individual(id="I6", name="Jackie Smith", gender="M", birthday="01 JAN 1990"),
+            Individual(id="I7", name="Jerry Smith", gender="M", birthday="01 JAN 1950"),
+            Individual(id="I8", name="Jill Smith", gender="F", birthday="01 JAN 1910"),
+            Individual(id="I9", name="Jenny Smith", gender="M", birthday="01 JAN 1990"),
+            Individual(id="I10", name="Joe Smith", gender="M", birthday="01 JAN 1900"),
+            Individual(id="I11", name="Jane Smith", gender="F", birthday="01 JAN 1905"),
+            Individual(id="I12", name="Janet Smith", gender="F", birthday="01 JAN 1990"),
         ]
 
     def test_parents_not_too_old(self):
@@ -307,6 +306,7 @@ class TestUS12(unittest.TestCase):
 
     def test_both_parents_too_old(self):
         self.assertFalse(US12(self.family4, self.individuals, False))
+
 
 if __name__ == '__main__':
     unittest.main()
