@@ -3,7 +3,7 @@ from datetime import datetime, date
 from prettytable import PrettyTable
 
 
-class individual:
+class Individual:
     def __init__(self, id, name="NA", gender="NA", birthday="NA", age="NA", alive=True, death="NA", child="NA",
                  spouse="NA"):
         self.id = id
@@ -17,22 +17,22 @@ class individual:
         self.spouse = spouse
 
 
-class family:
-    def __init__(self, id, married="NA", divorced="NA", husband_Id="NA", husband_name="NA", wife_Id="NA",
+class Family:
+    def __init__(self, id, married="NA", divorced="NA", husband_id="NA", husband_name="NA", wife_id="NA",
                  wife_name="NA", children="NA"):
         self.id = id
         self.married = married
         self.divorced = divorced
-        self.husband_Id = husband_Id
+        self.husband_id = husband_id
         self.husband_name = husband_name
-        self.wife_Id = wife_Id
+        self.wife_id = wife_id
         self.wife_name = wife_name
         self.children = children
 
     def validate_dates(self):
         if self.married and self.divorced:
-            married_date = datetime.strptime(self.married, "%d %b %Y")
-            divorced_date = datetime.strptime(self.divorced, "%d %b %Y")
+            married_date = to_date(self.married)
+            divorced_date = to_date(self.divorced)
             if divorced_date < married_date:
                 return False, "Divorce date {} is before marriage date {}".format(self.divorced, self.married)
         elif not self.married and self.divorced:
@@ -40,20 +40,25 @@ class family:
         return True, None
 
 
+def to_date(string: str):
+    return datetime.strptime(string, "%d %b %Y")
+
+
 by_id = {}
+
 
 # Code for User Stories
 def check_born_before_married(family, printErrors=True, by_id=by_id):
     """Satisfies US02"""
     if family.married == "NA" or family.married is None:
         return True
-    marriage_date = datetime.strptime(family.married, "%d %b %Y")
+    marriage_date = to_date(family.married)
 
     def validate_bday(id):
         bday = by_id[id].birthday
-        return bday is None or bday == "NA" or datetime.strptime(bday, "%d %b %Y") < marriage_date
+        return bday is None or bday == "NA" or to_date(bday) < marriage_date
 
-    if validate_bday(family.wife_Id) and validate_bday(family.husband_Id):
+    if validate_bday(family.wife_id) and validate_bday(family.husband_id):
         return True
     else:
         if printErrors:
@@ -61,24 +66,25 @@ def check_born_before_married(family, printErrors=True, by_id=by_id):
         return False
 
 
-def check_born_before_death(indi: individual, printErrors=True):
+def check_born_before_death(indi: Individual, printErrors=True):
     """Satisfies US03"""
     if indi.death == "NA" or indi.death is None or indi.birthday == "NA" or indi.birthday is None:
         return True
 
-    birth = datetime.strptime(indi.birthday, "%d %b %Y")
-    death = datetime.strptime(indi.death, "%d %b %Y")
+    birth = to_date(indi.birthday)
+    death = to_date(indi.death)
     if birth < death:
         return True
     else:
         if printErrors:
             print(f"ERROR: INDIVIDUAL: US03: {indi.id}: Died {indi.death} before born {indi.birthday}")
 
+
 def check_male_members_last_name(fam, by_id=by_id, print_errors=True):
     if fam.children == "NA":
          return True
     last_names_match = True
-    husband_obj = by_id[fam.husband_Id]
+    husband_obj = by_id[fam.husband_id]
     husband_name_arr= husband_obj.name.split()
     husband_last_name = husband_name_arr[-1].strip('/')
     for child in fam.children:
@@ -89,16 +95,17 @@ def check_male_members_last_name(fam, by_id=by_id, print_errors=True):
             last_name = name_arr[-1].strip('/')
             if last_name != husband_last_name:
                 if print_errors:
-                    print(f"ERROR: INDIVIDUAL: US16: {child_id}: Last name ({last_name}) does not match parent's ({fam.husband_Id}) last name ({husband_last_name})")
+                    print(f"ERROR: INDIVIDUAL: US16: {child_id}: Last name ({last_name}) does not match parent's ({fam.husband_id}) last name ({husband_last_name})")
                 last_names_match = False
     return last_names_match
+
 
 def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
         return True
 
-    marriage_date = datetime.strptime(family.married, "%d %b %Y")
-    divorce_date = datetime.strptime(family.divorced, "%d %b %Y")
+    marriage_date = to_date(family.married)
+    divorce_date = to_date(family.divorced)
 
     if marriage_date > divorce_date:
         if printErrors:
@@ -110,14 +117,14 @@ def US05(family, individuals, printErrors=True):
     if family.married == "NA":  # No marriage occurred
         return True
 
-    marriage_date = datetime.strptime(family.married, "%d %b %Y")
+    marriage_date = to_date(family.married)
 
-    spouse_ids = {family.husband_Id, family.wife_Id}
+    spouse_ids = {family.husband_id, family.wife_id}
     for indiv in individuals:
         if indiv.id in spouse_ids:
             spouse_ids.remove(indiv.id)  # Remove the spouse from the set of spouses to check
             if indiv.death is not None and indiv.death != "NA":
-                death_date = datetime.strptime(indiv.death, "%d %b %Y")
+                death_date = to_date(indiv.death)
                 if marriage_date > death_date:
                     if printErrors:
                         print(f"ERROR: FAMILY: US05: {family.id}: Married {family.married} after death {indiv.death} of individual {indiv.id}")
@@ -131,21 +138,18 @@ def US06(family, individuals, printErrors=True):
     if family.divorced == "NA": #No divorce
         return True
     
-    divorce_date = datetime.strptime(family.divorced, "%d %b %Y")
+    divorce_date = to_date(family.divorced)
 
-    family_ids = {family.husband_Id, family.wife_Id}
+    family_ids = {family.husband_id, family.wife_id}
     for i in individuals:
         if i.id in family_ids:
             family_ids.remove(i.id)
             if i.death is not None and i.death != "NA":
-                death_date = datetime.strptime(i.death, "%d %b %Y")
+                death_date = to_date(i.death)
                 if divorce_date > death_date:
-                    if i.id == family.husband_Id:
-                        type = "husband's"
-                    else:
-                        type = "wife's"
+                    type = "husband" if i.id == family.husband_id else "wife"
                     if printErrors:
-                        print(f"ERROR: FAMILY: US06: {family.id}: Divorced {family.divorced} after {type} ({i.id}) death on {i.death}")
+                        return (f"ERROR: FAMILY: US06: {family.id}: Divorced {family.divorced} after {type}'s ({i.id}) death on {i.death}")
                     return False
             if not family_ids:
                 break
@@ -162,12 +166,12 @@ def US08(family, individuals, printErrors = True):
             print(f"ANOMALY: FAMILY: US08: {family.id}: Child {child} before marriage (unmarried)")
         return False
 
-    marriage_date = datetime.strptime(family.married, "%d %b %Y")
+    marriage_date = to_date(family.married)
     
     for c in family.children:
         for i in individuals:
             c = c.strip('\'')
-            if c == i.id and datetime.strptime(i.birthday, "%d %b %Y") < marriage_date:
+            if c == i.id and to_date(i.birthday) < marriage_date:
                 if printErrors:
                     print(f"ANOMALY: FAMILY: US08: {family.id}: Child {c} before marriage on {family.married}")
                 return False
@@ -182,41 +186,40 @@ def US12(family, individuals, printErrors=True):
     if family.children == "NA":
         return flag
 
-
     if printErrors:
-        husband_bday = datetime.strptime(by_id[family.husband_Id].birthday, "%d %b %Y")
-        wife_bday = datetime.strptime(by_id[family.wife_Id].birthday, "%d %b %Y")
+        husband_bday = to_date(by_id[family.husband_id].birthday)
+        wife_bday = to_date(by_id[family.wife_id].birthday)
     else:
-        husband_bday = datetime.strptime(next((obj for obj in individuals if obj.id == family.husband_Id), None).birthday, "%d %b %Y")
-        wife_bday = datetime.strptime(next((obj for obj in individuals if obj.id == family.wife_Id), None).birthday, "%d %b %Y")
+        husband_bday = to_date(next((obj for obj in individuals if obj.id == family.husband_id), None).birthday)
+        wife_bday = to_date(next((obj for obj in individuals if obj.id == family.wife_id), None).birthday)
 
     for child_id in family.children:
         if printErrors:
-            child_bday = datetime.strptime(by_id[child_id.strip('\'')].birthday, "%d %b %Y")
+            child_bday = to_date(by_id[child_id.strip('\'')].birthday)
         else:
-            child_bday = datetime.strptime(next((obj for obj in individuals if obj.id == child_id), None).birthday, "%d %b %Y")
+            child_bday = to_date(next((obj for obj in individuals if obj.id == child_id), None).birthday)
         if (child_bday.year - husband_bday.year) > 80:
             if printErrors:
-                print(f"ERROR: FAMILY: US12: {family.id}: Father {family.husband_Id} is more than 80 years older than child {child_id}")
+                print(f"ERROR: FAMILY: US12: {family.id}: Father {family.husband_id} is more than 80 years older than child {child_id}")
             flag = False
         if (child_bday.year + -wife_bday.year) > 60:
             if printErrors:
                 print(
-                    f"ERROR: FAMILY: US12: {family.id}: Mother {family.wife_Id} is more than 60 years older than child {child_id}")
+                    f"ERROR: FAMILY: US12: {family.id}: Mother {family.wife_id} is more than 60 years older than child {child_id}")
             flag = False
     return flag
 
 def calculate_age(birth_date, death_date="NA"):
     if death_date != "NA":
-        birth_date_object = datetime.strptime(birth_date, "%d %b %Y").date()
-        death_date_object = datetime.strptime(death_date, "%d %b %Y").date()
+        birth_date_object = to_date(birth_date).date()
+        death_date_object = to_date(death_date).date()
         age = death_date_object.year - birth_date_object.year
         if death_date_object.month < birth_date_object.month or (
                 death_date_object.month == birth_date_object.month and death_date_object.day < birth_date_object.day):
             age -= 1
         return age
     else:
-        birth_date_object = datetime.strptime(birth_date, "%d %b %Y").date()
+        birth_date_object = to_date(birth_date).date()
         current_date = date.today()
         age = current_date.year - birth_date_object.year
         if current_date.month < birth_date_object.month or (
@@ -231,13 +234,17 @@ def find_name_for_id(id):
         
 def date_after_current_date(date):
     current_date = datetime.now().date()
-    date = datetime.strptime(date, "%d %b %Y").date()
+    date = to_date(date).date()
     return date > current_date
 
 def age_over_150(indiv):
     return indiv.age > 150
 
-file_name = input("Please enter the file name: ") or 'TestFamilyTree.ged'
+
+if __name__ == '__main__':
+    file_name = input("Please enter the file name: ") or 'TestFamilyTree.ged'
+else:
+    file_name = 'TestFamilyTree.ged'
 file_to_read = open(file_name, 'r')
 lines = file_to_read.readlines()
 valid_tags = ["INDI", "NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "FAM", "MARR", "HUSB", "WIFE", "CHIL", "DIV",
@@ -262,10 +269,10 @@ for line in lines:
         # Checks if tag is individual
         if level == "0" and tag == "INDI":
             individual_Id = " ".join(components)
-            individuals.append(individual(individual_Id))
+            individuals.append(Individual(individual_Id))
         elif level == "0" and tag == "FAM":
             family_Id = " ".join(components)
-            families.append(family(family_Id))
+            families.append(Family(family_Id))
         elif level == "1" and tag == "NAME":
             name = " ".join(components)
             individuals[-1].name = name
@@ -288,14 +295,14 @@ for line in lines:
             child = " ".join(components)
             individuals[-1].child = child
         elif tag == "HUSB":
-            husband_Id = " ".join(components)
-            husband_name = find_name_for_id(husband_Id)
-            families[-1].husband_Id = husband_Id
+            husband_id = " ".join(components)
+            husband_name = find_name_for_id(husband_id)
+            families[-1].husband_id = husband_id
             families[-1].husband_name = husband_name
         elif tag == "WIFE":
-            wife_Id = " ".join(components)
-            wife_name = find_name_for_id(wife_Id)
-            families[-1].wife_Id = wife_Id
+            wife_id = " ".join(components)
+            wife_name = find_name_for_id(wife_id)
+            families[-1].wife_id = wife_id
             families[-1].wife_name = wife_name
         elif tag == "CHIL":
             current_children = families[-1].children
@@ -361,11 +368,11 @@ for fam in families:
     if fam.divorced != "NA" and date_after_current_date(fam.divorced):
         print(f"ERROR: FAMILY: US01: {fam.id}: Divorce date {fam.divorced} occurs in future")
     if fam.children != "NA":
-        row = [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
-         fam.wife_name, "{%s}" % ",".join(fam.children)]
+        row = [fam.id, fam.married, fam.divorced, fam.husband_id, fam.husband_name, fam.wife_id,
+               fam.wife_name, "{%s}" % ",".join(fam.children)]
     else:
-        row = [fam.id, fam.married, fam.divorced, fam.husband_Id, fam.husband_name, fam.wife_Id,
-         fam.wife_name, "NA"]
+        row = [fam.id, fam.married, fam.divorced, fam.husband_id, fam.husband_name, fam.wife_id,
+               fam.wife_name, "NA"]
     families_table.add_row(row)
 # Print Individuals Table
 print()
