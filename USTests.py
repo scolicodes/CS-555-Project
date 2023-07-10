@@ -306,7 +306,41 @@ class TestUS12(unittest.TestCase):
 
     def test_both_parents_too_old(self):
         self.assertFalse(US12(self.family4, self.individuals, False))
+    
+class TestUS21(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US21
+    Sprint: Sprint 2
+    """
 
+    def setUp(self):
+        self.by_id = {
+            "I01": Individual(id="I01", name="Hayden Patton", gender="M", birthday="14 JAN 1999", age=24, alive=True),  # Male husband
+            "I02": Individual(id="I02", name="Teresa Patton", gender="F", birthday="20 OCT 1999", age=24, alive=True),  # Female wife
+            "I03": Individual(id="I03", name="Kenzie Nelson", gender="M", birthday="11 DEC 1977", age=46, alive=True),  # Male wife
+            "I04": Individual(id="I04", name="Rory Nelson", gender="F", birthday="12 NOV 1978", age=45, alive=True),  # Female husband
+            "I05": Individual(id="I04", name="Dante Portillo", gender="D", birthday="12 NOV 1980", age=43, alive=True),  # Husband with D for gender
+            "I06": Individual(id="I04", name="Kiera Church", gender="K", birthday="12 NOV 1988", age=35, alive=True)  # Wife with K for gender
+        }
+
+    def test_husband_is_male(self):
+        self.assertTrue(is_husband_male("I01", self.by_id))
+
+    def test_husband_is_not_male(self):
+        self.assertFalse(is_husband_male("I04", self.by_id))
+    
+    def test_wife_is_female(self):
+        self.assertTrue(is_wife_female("I02", self.by_id))
+    
+    def test_wife_is_not_female(self):
+        self.assertFalse(is_wife_female("I03", self.by_id))
+    
+    def test_wife_is_not_female_K_for_gender(self):
+        self.assertFalse(is_wife_female("I05", self.by_id))
+    
+    def test_husband_is_not_male_with_D_for_gender(self):
+        self.assertFalse(is_wife_female("I06", self.by_id))
 
 if __name__ == '__main__':
     unittest.main()
