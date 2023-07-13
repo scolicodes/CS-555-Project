@@ -269,7 +269,7 @@ class TestUS16(unittest.TestCase):
 
 class TestUS12(unittest.TestCase):
     """
-    Author: Your Name
+    Author: Michael Scoli
     User Story: US12
     Sprint: Sprint 2
     """
