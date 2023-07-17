@@ -134,6 +134,17 @@ def check_male_members_last_name(fam, by_id=by_id, print_errors=True):
                 last_names_match = False
     return last_names_match
 
+def is_husband_male(husband_id, by_id=by_id):
+    husband_obj = by_id[husband_id]
+    if husband_obj.gender != "M":
+        return False
+    return True
+
+def is_wife_female(wife_id, by_id=by_id):
+    wife_obj = by_id[wife_id]
+    if wife_obj.gender != "F":
+        return False
+    return True
 
 def US04(family, printErrors=True):
     if family.divorced == "NA":  # No divorce occurred
@@ -440,6 +451,10 @@ for fam in families:
     else:
         row = [fam.id, fam.married, fam.divorced, fam.husband_id, fam.husband_name, fam.wife_id,
                fam.wife_name, "NA"]
+    if not is_husband_male(fam.husband_id):
+        print(f"ERROR: FAMILY: US21: {fam.husband_id}: Husband is not male.")
+    if not is_wife_female(fam.wife_id):
+        print(f"ERROR: FAMILY: US21: {fam.wife_id}: Wife is not female.")
     families_table.add_row(row)
 # Print Individuals Table
 print()
