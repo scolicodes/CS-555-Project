@@ -158,6 +158,7 @@ class TestUS06(unittest.TestCase):
         self.assertFalse(US06(self.family4, [self.individual1, self.individual4], False))  # Husband deceased and married after death
         self.assertFalse(US06(self.family5, [self.individual3, self.individual2], False))  # Wife deceased and married after death
 
+
 class TestUS07(unittest.TestCase):
     """
     Author: Ronnie Arvanites
@@ -179,15 +180,15 @@ class TestUS07(unittest.TestCase):
     def test_not_living_and_older_than_150(self):
         self.individual2.age = calculate_age(self.individual2.birthday, self.individual2.death)
         self.assertTrue(age_over_150(self.individual2))
-    
+
     def test_not_living_and_under_150(self):
         self.individual3.age = calculate_age(self.individual3.birthday, self.individual3.death)
         self.assertFalse(age_over_150(self.individual3))
-    
+
     def test_living_and_under_150(self):
         self.individual4.age = calculate_age(self.individual4.birthday)
         self.assertFalse(age_over_150(self.individual4))
-    
+
     def test_living_and_under_150_but_older_than_100(self):
         self.individual5.age = calculate_age(self.individual5.birthday)
         self.assertFalse(age_over_150(self.individual5))
@@ -217,6 +218,67 @@ class TestUS08(unittest.TestCase):
         self.assertFalse(US08(self.family3, [self.individual1, self.individual2, self.individual4], False))
         self.assertTrue(US08(self.family4, [self.individual1, self.individual2, self.individual3], False))
         self.assertFalse(US08(self.family5, [self.individual1, self.individual2, self.individual3, self.individual4], False))
+
+
+class TestUS14(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US14
+    Sprint 2
+    """
+    def test_check_no_quintuplets_and_beyond(self):
+        by_id = {
+            "I01": Individual(id="I01", name="James Kern", birthday="20 OCT 2001"),
+            "I02": Individual(id="I02", name="Kevin Burns", birthday="20 OCT 2001"),
+            "I03": Individual(id="I03", name="Gary Paul", birthday="20 OCT 2001"),
+            "I04": Individual(id="I04", name="Jack Simons", birthday="20 OCT 2001"),
+            "I05": Individual(id="I05", name="Jaden Hall", birthday="20 OCT 2002"),
+            "I06": Individual(id="I06", name="Johnathan Rubio", birthday="20 OCT 2002"),
+            "I07": Individual(id="I07", name="Ryan Rubio", birthday="20 OCT 2002"),
+            "I08": Individual(id="I08", name="Joel Norman", birthday="20 OCT 2002"),
+            "I09": Individual(id="I09", name="Harper Norman", birthday="20 OCT 2002"),
+            "I10": Individual(id="I10", name="Lily Key", birthday="20 OCT 2002"),
+            "I11": Individual(id="I11", name="Brooks Pollard", birthday="20 OCT 2002"),
+            "I12": Individual(id="I12", name="Dominic Thompson", birthday="20 OCT 2002"),
+            "I13": Individual(id="I13", name="Annabelle Roth", birthday="20 OCT 2002"),
+            "I14": Individual(id="I14", name="Justin Simons", birthday="20 OCT 2002"),
+            "I15": Individual(id="I15", name="Allan Hall", birthday="20 OCT 2002"),
+            "I16": Individual(id="I16", name="Brandon Newman", birthday="20 OCT 2002"),
+        }
+
+        family = Family(id="F1", children=[f"'{child_id}'" for child_id in by_id.keys()])  # 16 children
+        family2 = Family(id="F2", children=["'I01'", "'I02'"])  # fewer than 5 children
+        family3 = Family(id="F3")
+        family4 = Family(id="F4", children=["'I01'", "'I02'", "'I03'", "'I04'", "'I05'"])
+        family5 = Family(id="F5", children=["'I08'", "'I10'", "'I16'", "'I09'", "'I15'", "'I11'"])
+
+        self.assertFalse(check_no_quintuplets_and_beyond(family, by_id, False))
+        self.assertTrue(check_no_quintuplets_and_beyond(family2, by_id, False))
+        self.assertTrue(check_no_quintuplets_and_beyond(family3, by_id, False))
+        self.assertTrue(check_no_quintuplets_and_beyond(family4, by_id, False))
+        self.assertFalse(check_no_quintuplets_and_beyond(family5, by_id, False))
+
+
+class TestUS15(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US15
+    Sprint 2
+    """
+    def test_check_under15_siblings(self):
+
+        family = Family(id="F1", children=[f"'I{child_id}'" for child_id in range(16)])
+        family2 = Family(id="F2", children=["'I01'", "'I02'"])
+        family3 = Family(id="F3")
+        family4 = Family(id="F4", children=["'I06'", "'I02'", "'I03'", "'I04'", "'I05'"])
+        family5 = Family(id="F5", children=["'I07'", "'I10'", "'I16'", "'I09'", "'I15'", "'I11'"])
+
+        self.assertFalse(check_under15_siblings(family, False))
+        self.assertTrue(check_under15_siblings(family2, False))
+        self.assertTrue(check_under15_siblings(family3, False))
+        self.assertTrue(check_under15_siblings(family4, False))
+        self.assertTrue(check_under15_siblings(family5, False))
+
 
 
 class TestUS16(unittest.TestCase):
