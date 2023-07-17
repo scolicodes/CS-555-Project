@@ -1,5 +1,7 @@
 import re
 from datetime import datetime, date
+from functools import reduce
+
 from prettytable import PrettyTable
 
 
@@ -79,6 +81,39 @@ def check_born_before_death(indi: Individual, printErrors=True):
         if printErrors:
             print(f"ERROR: INDIVIDUAL: US03: {indi.id}: Died {indi.death} before born {indi.birthday}")
 
+
+def check_no_quintuplets_and_beyond(fam: Family, by_id=by_id, print_errors=True):
+    """Satisfies US14 (5+ births at the same time not allowed)"""
+    children = fam.children
+    if isinstance(children, list):
+        birthdays = [to_date(by_id[child.strip("'")].birthday) for child in children]
+        # sort
+        birthdays.sort()
+        births = 1
+        prev = None
+        for birthday in birthdays:
+            if prev is not None:
+                # might be 1 day apart if born at/around midnight
+                if (birthday - prev).days <= 1:
+                    births += 1
+                    if births >= 5:
+                        if print_errors:
+                            print(f"ERROR: FAMILY: US14: {fam.id}: >=5 births detected at the same time")
+                        return False
+                    continue
+            births = 1
+            prev = birthday
+
+    return True
+
+
+def check_under15_siblings(fam: Family, print_errors=True):
+    """Satisfies US15 (15+ siblings not allowed)"""
+    if isinstance(fam.children, list) and len(fam.children) >= 15:
+        if print_errors:
+            print(f"ERROR: FAMILY: US15: {fam.id}: >=15 siblings detected in family")
+        return False
+    return True
 
 def check_male_members_last_name(fam, by_id=by_id, print_errors=True):
     if fam.children == "NA":
