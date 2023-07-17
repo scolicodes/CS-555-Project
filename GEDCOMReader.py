@@ -397,6 +397,8 @@ for fam in families:
     check_born_before_married(fam)
     check_male_members_last_name(fam)
     US12(fam, None)
+    check_no_quintuplets_and_beyond(fam)
+    check_under15_siblings(fam)
 
     if fam.married != "NA" and date_after_current_date(fam.married):
         print(f"ERROR: FAMILY: US01: {fam.id}: Marriage date {fam.married} occurs in future")
