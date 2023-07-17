@@ -244,6 +244,35 @@ def US12(family, individuals, printErrors=True):
             flag = False
     return flag
 
+
+def US13(family, individuals, printErrors=True):
+    """Birth dates of siblings should be more than 8 months apart or less than 2 days apart
+    (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)"""
+
+    # If there's only once child or no children, there's no need to check anything.
+    if family.children == "NA" or len(family.children) < 2:
+        return True
+
+    # Convert string dates to datetime objects and sort them.
+    if printErrors:
+        sorted_bdays = sorted(to_date(by_id[child_id.strip('\'')].birthday) for child_id in family.children)
+    else:
+        children = list(filter(lambda x: x.id in family.children, individuals))
+        sorted_bdays = sorted(to_date(child.birthday) for child in children)
+
+    for i in range(len(sorted_bdays) - 1):
+        difference = sorted_bdays[i + 1] - sorted_bdays[i]
+        # If the difference is more than 2 days but less than 8 months, there's a problem.
+        if 2 < difference.days < 240:
+            if printErrors:
+                print(
+                    f"ERROR: FAMILY: US13: {family.id}: There is less than 8 months and more than 2 days between "
+                    f"siblings' birthdays")
+            return False
+
+    return True
+
+
 def calculate_age(birth_date, death_date="NA"):
     if death_date != "NA":
         birth_date_object = to_date(birth_date).date()
@@ -397,6 +426,7 @@ for fam in families:
     check_born_before_married(fam)
     check_male_members_last_name(fam)
     US12(fam, None)
+    US13(fam, None)
     check_no_quintuplets_and_beyond(fam)
     check_under15_siblings(fam)
 

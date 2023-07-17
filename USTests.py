@@ -331,9 +331,9 @@ class TestUS16(unittest.TestCase):
 
 class TestUS12(unittest.TestCase):
     """
-    Author: Your Name
+    Author: Michael Scoli
     User Story: US12
-    Sprint: Sprint 1
+    Sprint: Sprint 2
     """
 
     def setUp(self):
@@ -368,6 +368,32 @@ class TestUS12(unittest.TestCase):
 
     def test_both_parents_too_old(self):
         self.assertFalse(US12(self.family4, self.individuals, False))
+
+
+class TestUS13(unittest.TestCase):
+    """
+    Author: Michael Scoli
+    User Story: US13
+    Sprint: Sprint 2
+    """
+
+    def setUp(self):
+        self.family1 = Family(id="F1", children=["I01", "I02"])  # siblings born more than 8 months apart
+        self.family2 = Family(id="F2", children=["I03", "I04"])  # siblings born less than 2 days apart
+        self.family3 = Family(id="F3", children=["I05", "I06"])  # siblings born less than 8 months but more than 2 days apart
+        self.individual1 = Individual(id="I01", name="Alice", birthday="1 JAN 2000")
+        self.individual2 = Individual(id="I02", name="Bob", birthday="1 SEP 2000")
+        self.individual3 = Individual(id="I03", name="Charlie", birthday="1 JAN 2000")
+        self.individual4 = Individual(id="I04", name="David", birthday="2 JAN 2000")
+        self.individual5 = Individual(id="I05", name="Eve", birthday="1 JAN 2000")
+        self.individual6 = Individual(id="I06", name="Frank", birthday="1 MAR 2000")
+        self.individuals = [self.individual1, self.individual2, self.individual3, self.individual4, self.individual5, self.individual6]
+
+    def test_sibling_spacing(self):
+        self.assertTrue(US13(self.family1, self.individuals, False))  # siblings born more than 8 months apart
+        self.assertTrue(US13(self.family2, self.individuals, False))  # siblings born less than 2 days apart
+        self.assertFalse(US13(self.family3, self.individuals, False)) # siblings born less than 8 months but more than 2 days apart
+
 
 
 if __name__ == '__main__':
