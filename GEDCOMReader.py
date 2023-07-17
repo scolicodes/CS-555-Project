@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from functools import reduce
 
 from prettytable import PrettyTable
@@ -210,6 +210,59 @@ def US08(family, individuals, printErrors = True):
                 if printErrors:
                     print(f"ANOMALY: FAMILY: US08: {family.id}: Child {c} before marriage on {family.married}")
                 return False
+        
+    return True
+
+def US09(family, individuals, printErrors=True):
+    """Child should be born before death of mother and before 9 months after death of father"""
+    if family.children == "NA":
+        return True
+    
+    death_date = ""
+    for i in individuals:
+        if i.id == family.wife_id:
+            if i.death is not None and i.death != "NA":
+                death_date = to_date(i.death)
+    
+    husband_threshold = death_date + timedelta(days=270)
+
+    for i in individuals:
+        if i.id == family.husband_id:
+            if i.death is not None and i.death != "NA" and to_date(i.death) < husband_threshold:
+                death_date = to_date(i.death) + timedelta(days=270)
+    
+    for c in family.children:
+        for i in individuals:
+            c = c.strip('\'')
+            if c == i.id and to_date(i.birthday) > death_date:
+                if printErrors:
+                    print(f"ERROR: FAMILY: US09: {family.id}: Child {c} after parent death on {death_date}")
+                return False
+        
+    return True
+
+def US10(family, individuals, printErrors=True):
+    """Marriage should be at least 14 years after birth of both spouses (parents must be at least 14 years old)"""
+    
+    if family.married == "NA":
+        return True
+    
+    marriage_date = to_date(family.married)
+
+    for i in individuals:
+        if i.id == family.wife_id:
+            birth_date = to_date(i.birthday)
+
+    for i in individuals:
+        if i.id == family.husband_id and to_date(i.birthday) > birth_date:
+            birth_date = to_date(i.birthday)
+
+    threshold = birth_date.replace(year=birth_date.year + 14)
+    
+    if threshold > marriage_date:
+        if printErrors:
+            print(f"ERROR: FAMILY: US10: {family.id}: Marriage less than 14 years after parent birth on {birth_date}")
+        return False
         
     return True
 
