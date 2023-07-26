@@ -368,6 +368,33 @@ def date_after_current_date(date):
 def age_over_150(indiv):
     return indiv.age > 150
 
+def create_deceased_individuals_table(indivs):
+    deceased_table = PrettyTable()
+    deceased_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+    for indiv in indivs:
+        if indiv.alive == False:
+            child_field = "None" if indiv.child == "NA" else "{'%s'}" % indiv.child
+            spouse_field = "NA" if indiv.spouse == "NA" else "{'%s'}" % indiv.spouse
+            deceased_table.add_row(
+                [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
+    return deceased_table
+
+def create_living_and_married_individuals_table(families, by_id=by_id):
+    living_and_married_table = PrettyTable()
+    living_and_married_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+    married_ids = set()
+    for fam in families:
+        if fam.divorced == "NA":
+            married_ids.add(fam.husband_id)
+            married_ids.add(fam.wife_id)
+    for id in married_ids:
+        indiv = by_id[id]
+        if indiv.alive:
+            child_field = "None" if indiv.child == "NA" else "{'%s'}" % indiv.child
+            spouse_field = "NA" if indiv.spouse == "NA" else "{'%s'}" % indiv.spouse
+            living_and_married_table.add_row(
+                [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
+    return living_and_married_table
 
 if __name__ == '__main__':
     file_name = input("Please enter the file name: ") or 'TestFamilyTree.ged'
@@ -509,6 +536,7 @@ for fam in families:
     if not is_wife_female(fam.wife_id):
         print(f"ERROR: FAMILY: US21: {fam.wife_id}: Wife is not female.")
     families_table.add_row(row)
+
 # Print Individuals Table
 print()
 print('Individuals')
@@ -519,5 +547,13 @@ print()
 print('Families')
 print(families_table)
 
+#Print Deceased Individuals Table
+print()
+print('Deceased Individuals')
+print(create_deceased_individuals_table(individuals))
 
+#Print Living and Married Individuals Table
+print()
+print('Living and Married Individuals')
+print(create_living_and_married_individuals_table(families))
 

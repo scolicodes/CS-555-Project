@@ -457,6 +457,84 @@ class TestUS21(unittest.TestCase):
     def test_husband_is_not_male_with_D_for_gender(self):
         self.assertFalse(is_wife_female("I06", self.by_id))
 
+class TestUS29(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US29
+    Sprint: Sprint 3
+    """
+
+    def setUp(self):
+        indiv1 = Individual(id="I01", name="Mark Gornik", gender="M", birthday="22 MAR 1911", age=77, alive=False)
+        indiv2 = Individual(id="I02", name="Sophie McCraw", gender="F", birthday="11 NOV 1999", age=24, alive=True)
+        indiv3 = Individual(id="I03", name="Jack Nelson", gender="M", birthday="02 JUL 1977", age=46, alive=True)
+        indiv4 = Individual(id="I04", name="Therese Felker", gender="F", birthday="19 JAN 1902", age=92, alive=False)
+        indiv5 = Individual(id="I04", name="Mabel Meraz", gender="F", birthday="16 OCT 1980", age=43, alive=True)
+        indiv6 = Individual(id="I04", name="Marcus Gerberding", gender="M", birthday="17 MAY 1988", age=34, alive=False)
+        self.deceased_table1 = create_deceased_individuals_table([indiv1, indiv3, indiv4]) # 2 deceased individuals
+        self.deceased_table2 = create_deceased_individuals_table([indiv1, indiv5]) # 1 deceased individual
+        self.deceased_table3 = create_deceased_individuals_table([indiv1, indiv4, indiv6]) # 3 deceased individuals
+        self.deceased_table4 = create_deceased_individuals_table([indiv1, indiv2, indiv3, indiv4, indiv5, indiv6]) # 3 deceased individuals
+        self.deceased_table5 = create_deceased_individuals_table([indiv2, indiv3, indiv5]) # 0 deceased individuals
+
+    def test_create_deceased_individuals_table1(self):
+        self.assertEqual(len(self.deceased_table1.rows), 2)
+
+    def test_create_deceased_individuals_table2(self):
+        self.assertEqual(len(self.deceased_table2.rows), 1)
+
+    def test_create_deceased_individuals_table3(self):
+        self.assertEqual(len(self.deceased_table3.rows), 3)
+
+    def test_create_deceased_individuals_table4(self):
+        self.assertEqual(len(self.deceased_table4.rows), 3)
+
+    def test_create_deceased_individuals_table5(self):
+        self.assertEqual(len(self.deceased_table5.rows), 0)
+
+class TestUS30(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US30
+    Sprint: Sprint 3
+    """
+
+    def setUp(self):
+        fam1 = Family(id="F1", married="12 APR 2000", divorced="NA", husband_id="I01", husband_name="Marco Cattaneo", wife_id="I02", wife_name="Ashlee Pinkham")
+        fam2 = Family(id="F2", married="19 OCT 2019", divorced="NA", husband_id="I03", husband_name="Brian Heeney", wife_id="I04", wife_name="Suzzanne Biddle")
+        fam3 = Family(id="F3", married="01 FEB 2015", divorced="19 MAR 2020", husband_id="I06", husband_name="Robin Schremmer", wife_id="I05", wife_name="Sandra Bozic")
+        fam4 = Family(id="F4", married="27 SEP 1945", divorced="NA", husband_id="I07", husband_name="Arian Maijala", wife_id="I08", wife_name="Hannah Moffitt")
+        by_id = {
+            "I01": Individual(id="I01", name="Marco Cattaneo", gender="M", birthday="19 OCT 1977", alive=True),
+            "I02": Individual(id="I02", name="Ashlee Pinkham", gender="F", birthday="10 NOV 1978", alive=True),
+            "I03": Individual(id="I03", name="Brian Heeney", gender="M", birthday="11 DEC 1998", alive=True),
+            "I04": Individual(id="I04", name="Suzzanne Biddle", gender="F", birthday="23 NOV 1998", alive=True),
+            "I05": Individual(id="I05", name="Sandra Bozic", gender="F", birthday="12 MAY 1980", alive=True),
+            "I06": Individual(id="I06", name="Robin Schremmer", gender="M", birthday="22 APR 1988", alive=True),
+            "I07": Individual(id="I07", name="Arian Maijala", gender="M", birthday="15 DEC 1922", alive=False),
+            "I08": Individual(id="I08", name="Hannah Moffitt", gender="F", birthday="10 FEB 1911", alive=False)
+        }
+        self.living_and_married_table1 = create_living_and_married_individuals_table([fam1, fam2], by_id) # 4 living and married individuals
+        self.living_and_married_table2 = create_living_and_married_individuals_table([fam1 , fam3, fam2], by_id) # 4 living and married individuals
+        self.living_and_married_table3 = create_living_and_married_individuals_table([fam1 , fam3, fam4], by_id) # 2 living and married individuals
+        self.living_and_married_table4 = create_living_and_married_individuals_table([fam1 , fam2, fam3, fam4], by_id) # 4 living and married individuals
+        self.living_and_married_table5 = create_living_and_married_individuals_table([fam3, fam4], by_id) # 0 living and married individuals
+
+    def test_create_living_and_married_table1(self):
+        self.assertEqual(len(self.living_and_married_table1.rows), 4)
+
+    def test_create_living_and_married_table2(self):
+        self.assertEqual(len(self.living_and_married_table2.rows), 4)
+
+    def test_create_living_and_married_table3(self):
+        self.assertEqual(len(self.living_and_married_table3.rows), 2)
+
+    def test_create_living_and_married_table4(self):
+        self.assertEqual(len(self.living_and_married_table4.rows), 4)
+
+    def test_create_living_and_married_table5(self):
+        self.assertEqual(len(self.living_and_married_table5.rows), 0)
+
 class TestUS13(unittest.TestCase):
     """
     Author: Michael Scoli
