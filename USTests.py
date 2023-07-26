@@ -561,5 +561,69 @@ class TestUS13(unittest.TestCase):
 
 
 
+class TestUS27(unittest.TestCase):
+    """
+    Author: Michael Scoli
+    User Story: US27
+    Sprint: Sprint 3
+    """
+
+    def setUp(self):
+        self.individuals = [
+            Individual(id="I01", name="James Kern", gender="M", birthday="20 OCT 2001", age=21, alive=True),
+            Individual(id="I02", name="Kevin Burns", gender="M", birthday="18 FEB 2002", age=21, alive=True),
+            Individual(id="I03", name="Gary Paul", gender="M", birthday="14 MAY 1999", age=24, alive=True),
+            Individual(id="I04", name="Jack Simons", gender="M", birthday="12 DEC 2000", age=22, alive=True)
+        ]
+
+    def test_individual_age_inclusion(self):
+        individuals_table = PrettyTable()
+        individuals_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+
+        for indiv in self.individuals:
+            child_field = "None" if indiv.child == "NA" else "{'%s'}" % indiv.child
+            spouse_field = "NA" if indiv.spouse == "NA" else "{'%s'}" % indiv.spouse
+            individuals_table.add_row([indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
+
+        for row in individuals_table.get_string().split('\n')[3:-1]:  # Skip headers and separator lines
+            individual_id = row.split('|')[1].strip()  # Split by '|' and strip spaces
+            expected_age = next((indiv.age for indiv in self.individuals if indiv.id == individual_id), None)
+            if expected_age is not None:
+                actual_age = int(row.split('|')[5].strip())  # Split by '|' and strip spaces
+                self.assertEqual(actual_age, expected_age)
+            else:
+                self.fail(f'Individual with ID {individual_id} not found in self.individuals')
+
+
+class TestUS28(unittest.TestCase):
+    """
+    Author: Michael Scoli
+    User Story: US28
+    Sprint: Sprint 3
+    """
+
+    def setUp(self):
+        indiv1 = Individual(id="I01", name="Mark Gornik", gender="M", birthday="22 MAR 1911", age=77, alive=False)
+        indiv2 = Individual(id="I02", name="Sophie McCraw", gender="F", birthday="11 NOV 1999", age=24, alive=True)
+        indiv3 = Individual(id="I03", name="Jack Nelson", gender="M", birthday="02 JUL 1977", age=46, alive=True)
+        indiv4 = Individual(id="I04", name="Therese Felker", gender="F", birthday="19 JAN 1902", age=92, alive=False)
+
+        fam1 = Family(id="F01", married="22 FEB 1930", divorced="NA", husband_id="I01", husband_name=indiv1.name, wife_id="I02", wife_name=indiv2.name, children=["'I03'", "'I04'"])
+
+        self.by_id = {"I01": indiv1, "I02": indiv2, "I03": indiv3, "I04": indiv4}
+        self.siblings_by_age_table1 = create_siblings_by_age_table([fam1], self.by_id)  # 2 siblings
+
+    def test_create_siblings_by_age_table1(self):
+        self.assertEqual(len(self.siblings_by_age_table1.rows), 2)
+
+        # Ensure the siblings are sorted by age in descending order
+        previous_age = float('inf')
+        for row in self.siblings_by_age_table1._rows:
+            age = int(row[3])  # Age column is at index 3
+            self.assertGreaterEqual(previous_age, age)
+            previous_age = age
+
+
+
 if __name__ == '__main__':
     unittest.main()

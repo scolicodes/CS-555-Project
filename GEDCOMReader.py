@@ -396,6 +396,23 @@ def create_living_and_married_individuals_table(families, by_id=by_id):
                 [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
     return living_and_married_table
 
+def create_siblings_by_age_table(families, by_id=by_id):
+    """Satisfies US28"""
+    siblings_by_age_table = PrettyTable()
+    siblings_by_age_table.field_names = ["Family ID", "Sibling ID", "Name", "Age"]
+    for family in families:
+        if family.children != "NA":
+            # Get a list of siblings (children of the family) with their age
+            siblings = [(child_id.strip("'"), by_id[child_id.strip("'")].name, by_id[child_id.strip("'")].age) for child_id in family.children]
+
+            # Sort the list by age, in decreasing order
+            siblings.sort(key=lambda x: x[2], reverse=True)
+            # Add rows to the table
+            for sibling in siblings:
+                siblings_by_age_table.add_row([family.id] + list(sibling))
+    return siblings_by_age_table
+
+
 if __name__ == '__main__':
     file_name = input("Please enter the file name: ") or 'TestFamilyTree.ged'
 else:
@@ -556,4 +573,9 @@ print(create_deceased_individuals_table(individuals))
 print()
 print('Living and Married Individuals')
 print(create_living_and_married_individuals_table(families))
+
+# Print Siblings-By-Age Table
+print()
+print('List Siblings in Families by Decreasing Age')
+print(create_siblings_by_age_table(families))
 
