@@ -531,6 +531,7 @@ for fam in families:
     US05(fam, individuals)
     US06(fam, individuals)
     US08(fam, individuals)
+    US25(fam, individuals)
     check_born_before_married(fam)
     check_male_members_last_name(fam)
     US12(fam, None)
