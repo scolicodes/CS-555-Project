@@ -296,7 +296,7 @@ class TestUS24(unittest.TestCase):
         self.individual9 = Individual(id="I9", name="Jack Smith", gender="M", birthday="01 JAN 1990", death="NA")
         self.individual10 = Individual(id="I10", name="Jill Smith", gender="F", birthday="5 DEC 1989", death="NA")
 
-    def test_death_before_birth(self):
+    def test_unique_families(self):
         self.assertTrue(US24([self.family1, self.family2], [self.individual1, self.individual2, self.individual3, self.individual4], False))
         self.assertFalse(US24([self.family1, self.family2, self.family3], [self.individual1, self.individual2, self.individual3, self.individual4, self.individual5, self.individual6], False))
         self.assertFalse(US24([self.family1, self.family3, self.family4], [self.individual1, self.individual2, self.individual3, self.individual4], False))
@@ -325,7 +325,7 @@ class TestUS25(unittest.TestCase):
         self.individual7 = Individual(id="I7", name="Elizabeth Smith", gender="F", birthday="5 DEC 2007", death="NA")
         self.individual8 = Individual(id="I8", name="Elizabeth Smith", gender="F", birthday="5 DEC 2009", death="NA")
 
-    def test_death_before_birth(self):
+    def test_unique_children(self):
         self.assertTrue(US25(self.family1, [self.individual1, self.individual2], False))
         self.assertTrue(US25(self.family2, [self.individual1, self.individual2, self.individual3], False))
         self.assertTrue(US25(self.family3, [self.individual1, self.individual2, self.individual3, self.individual4], False))
