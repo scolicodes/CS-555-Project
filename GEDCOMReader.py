@@ -1,6 +1,5 @@
 import re
 from datetime import datetime, date, timedelta
-from functools import reduce
 
 from prettytable import PrettyTable
 
@@ -359,14 +358,35 @@ def find_name_for_id(id):
     for individual in individuals:
         if individual.id == id:
             return individual.name
-        
+
+
 def date_after_current_date(date):
     current_date = datetime.now().date()
     date = to_date(date).date()
     return date > current_date
 
+
 def age_over_150(indiv):
     return indiv.age > 150
+
+
+def unique_ids(indivs: list[Individual], printErrors=True):
+    """Satisfies US22 (All individuals have unique ids)"""
+    if len(indivs) == len({i.id for i in indivs}):
+        return True
+    if printErrors:
+        print("US22: Error: Duplicate ID's found in individuals")
+    return False
+
+
+def unique_names_and_birthdays(indivs: list[Individual], printErrors=True):
+    """Satisfies US23 (All individuals do not share both a name and birthday)"""
+    if len(indivs) == len({(i.name, i.birthday) for i in indivs}):
+        return True
+    if printErrors:
+        print("US23: Error: Duplicate name and birthday for 2+ individuals")
+    return False
+
 
 def create_deceased_individuals_table(indivs):
     deceased_table = PrettyTable()
@@ -502,7 +522,9 @@ for indiv in individuals:
     spouse_field = "NA" if indiv.spouse == "NA" else "{'%s'}" % indiv.spouse
     individuals_table.add_row(
         [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
-
+# individuals check
+unique_ids(individuals)
+unique_names_and_birthdays(individuals)
 
 # Families Table
 families_table = PrettyTable()

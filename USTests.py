@@ -457,6 +457,36 @@ class TestUS21(unittest.TestCase):
     def test_husband_is_not_male_with_D_for_gender(self):
         self.assertFalse(is_wife_female("I06", self.by_id))
 
+class TestUS22(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US22
+    Sprint: Sprint 3
+    """
+    def test_unique_ids(self):
+        i1 = Individual('I1')
+        i2 = Individual('I2')
+        i3 = Individual('I1')
+        self.assertTrue(unique_ids([i1, i2], False))
+        self.assertFalse(unique_ids([i1, i2, i3], False))
+
+
+class TestUS23(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US23
+    Sprint: Sprint 3
+    """
+    def test_unique_names_and_birthdays(self):
+        i1 = Individual('I1', name='Dom Thompson', birthday='11 MAR 2002')
+        i2 = Individual('I2', name='Dom Thompson', birthday='30 MAR 2001')
+        i3 = Individual('I3', name='Dom Thompson', birthday='20 APR 2000')
+        i4 = Individual('I4', name='Dom Thompson', birthday='20 APR 2000')
+        i5 = Individual('I5', name='Dif Mann', birthday='11 MAR 2002')
+        self.assertTrue(unique_names_and_birthdays([i1, i2, i3], False))
+        self.assertFalse(unique_names_and_birthdays([i1, i2, i3, i4], False))
+        self.assertTrue(unique_names_and_birthdays([i1, i2, i3, i5], False))
+
 class TestUS29(unittest.TestCase):
     """
     Author: Ronnie Arvanites
