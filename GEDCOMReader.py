@@ -545,12 +545,15 @@ families_table = PrettyTable()
 families_table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name",
                               "Children"]
 
+# Families check
+US24(families, individuals)
+
 for fam in families:
     US04(fam)
     US05(fam, individuals)
     US06(fam, individuals)
     US08(fam, individuals)
-    US24(families, individuals)
+    US25(fam, individuals)
     check_born_before_married(fam)
     check_male_members_last_name(fam)
     US12(fam, None)
