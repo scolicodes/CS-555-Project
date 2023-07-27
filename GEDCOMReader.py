@@ -276,6 +276,42 @@ def US10(family, individuals, printErrors=True):
         
     return True
 
+def US24(families, individuals, printErrors=True):
+    """No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file"""
+    
+    unique_families = []
+
+    for f in families:
+        for i in individuals:
+            if f.wife_id == i.id:
+                wife_name = i.name
+            if f.husband_id == i.id:
+                husband_name = i.name
+        if (husband_name, wife_name, to_date(f.married)) in unique_families:
+            if printErrors:
+                        print(f"ERROR: FAMILY: US24: {f.id}: Family with the same spouse names and marriage date")
+            return False
+        unique_families.append((husband_name, wife_name, to_date(f.married)))
+        
+    return True
+
+def US25(family, individuals, printErrors=True):
+    """No more than one child with the same name and birth date should appear in a family"""
+    
+    unique_children = [("", "")]
+
+    for c in family.children:
+        for i in individuals:
+            c = c.strip('\'')
+            if c == i.id:
+                if (i.name, i.birthday) in unique_children:
+                    if printErrors:
+                        print(f"ERROR: FAMILY: US25: {family.id}: 2 children with same name {i.name} and birthday {i.birthday} in family")
+                    return False
+                unique_children.append((i.name, i.birthday))
+        
+    return True
+
 def US12(family, individuals, printErrors=True):
     """Mother should be less than 60 years older than her children and
     father should be less than 80 years older than his children"""
@@ -548,11 +584,15 @@ families_table = PrettyTable()
 families_table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name",
                               "Children"]
 
+# Families check
+US24(families, individuals)
+
 for fam in families:
     US04(fam)
     US05(fam, individuals)
     US06(fam, individuals)
     US08(fam, individuals)
+    US25(fam, individuals)
     check_born_before_married(fam)
     check_male_members_last_name(fam)
     US12(fam, None)
