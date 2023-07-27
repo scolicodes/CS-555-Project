@@ -277,6 +277,23 @@ def US10(family, individuals, printErrors=True):
         
     return True
 
+def US25(family, individuals, printErrors=True):
+    """No more than one child with the same name and birth date should appear in a family"""
+    
+    unique_children = [("", "")]
+
+    for c in family.children:
+        for i in individuals:
+            c = c.strip('\'')
+            if c == i.id:
+                if (i.name, i.birthday) in unique_children:
+                    if printErrors:
+                        print(f"ERROR: FAMILY: US25: {family.id}: 2 children with same name {i.name} and birthday {i.birthday} in family")
+                    return False
+                unique_children.append((i.name, i.birthday))
+        
+    return True
+
 def US12(family, individuals, printErrors=True):
     """Mother should be less than 60 years older than her children and
     father should be less than 80 years older than his children"""
