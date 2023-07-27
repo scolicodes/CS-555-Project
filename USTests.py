@@ -248,6 +248,61 @@ class TestUS09(unittest.TestCase):
         self.assertTrue(US09(self.family4, [self.individual6, self.individual2, self.individual5], False))
         self.assertFalse(US09(self.family5, [self.individual1, self.individual2, self.individual7], False))
 
+class TestUS10(unittest.TestCase):
+    """
+    Author: Zac Schuh
+    User Story: US10
+    Sprint: Sprint 2
+    """
+
+    def setUp(self):
+        self.family1 = Family("F1", "NA", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Individuals never married
+        self.family2 = Family("F2", "15 JUN 1990", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Married thirty years after mother's birth
+        self.family3 = Family("F3", "1 JAN 1973", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Married thirteen years after mother's birth
+        self.family4 = Family("F4", "24 OCT 1970", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Married before both parents were fourteen
+        self.family5 = Family("F5", "1 JUN 1974", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Married exactly fourteen years after mother's birth
+        self.individual1 = Individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1958", death="NA")
+        self.individual2 = Individual(id="I2", name="Jane Smith", gender="F", birthday="01 JUN 1960", death="NA")
+        self.individuals = [self.individual1, self.individual2]
+
+    def test_marriage_after_fourteen(self):
+        self.assertTrue(US10(self.family1, [self.individual1, self.individual2], False))
+        self.assertTrue(US10(self.family2, [self.individual1, self.individual2], False))
+        self.assertFalse(US10(self.family3, [self.individual1, self.individual2], False))
+        self.assertFalse(US10(self.family4, [self.individual1, self.individual2], False))
+        self.assertTrue(US10(self.family5, [self.individual1, self.individual2], False))
+
+class TestUS24(unittest.TestCase):
+    """
+    Author: Zac Schuh
+    User Story: US24
+    Sprint: Sprint 3
+    """
+
+    def setUp(self):
+        self.family1 = Family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith")  
+        self.family2 = Family("F2", "15 JUN 1996", "NA", "I3", "Jack Smith", "I4", "Jill Smith")  
+        self.family3 = Family("F3", "15 JUN 1995", "NA", "I5", "John Smith", "I6", "Jane Smith")  # Same as F1
+        self.family4 = Family("F4", "15 JUN 1995", "NA", "I7", "John Smith", "I8", "Jill Smith")  
+        self.family5 = Family("F5", "10 MAY 1999", "NA", "I9", "Jack Smith", "I10", "Jill Smith")
+        self.individual1 = Individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960", death="NA")
+        self.individual2 = Individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1970", death="NA")
+        self.individual3 = Individual(id="I3", name="Jack Smith", gender="M", birthday="01 JAN 1996", death="NA")
+        self.individual4 = Individual(id="I4", name="Jill Smith", gender="F", birthday="03 MAR 1993", death="NA")
+        self.individual5 = Individual(id="I5", name="John Smith", gender="M", birthday="10 JUN 1991", death="NA")
+        self.individual6 = Individual(id="I6", name="Jane Smith", gender="M", birthday="10 JUN 1991", death="NA")
+        self.individual7 = Individual(id="I7", name="John Smith", gender="F", birthday="5 DEC 1987", death="NA")
+        self.individual8 = Individual(id="I8", name="Jill Smith", gender="F", birthday="5 DEC 1989", death="NA")
+        self.individual9 = Individual(id="I9", name="Jack Smith", gender="M", birthday="01 JAN 1990", death="NA")
+        self.individual10 = Individual(id="I10", name="Jill Smith", gender="F", birthday="5 DEC 1989", death="NA")
+
+    def test_death_before_birth(self):
+        self.assertTrue(US24([self.family1, self.family2], [self.individual1, self.individual2, self.individual3, self.individual4], False))
+        self.assertFalse(US24([self.family1, self.family2, self.family3], [self.individual1, self.individual2, self.individual3, self.individual4, self.individual5, self.individual6], False))
+        self.assertFalse(US24([self.family1, self.family3, self.family4], [self.individual1, self.individual2, self.individual3, self.individual4], False))
+        self.assertTrue(US24([self.family2, self.family4], [self.individual3, self.individual4, self.individual7, self.individual8], False))
+        self.assertTrue(US24([self.family2, self.family4, self.family5], [self.individual3, self.individual4, self.individual7, self.individual8, self.individual9, self.individual10], False))
+
 class TestUS25(unittest.TestCase):
     """
     Author: Zac Schuh

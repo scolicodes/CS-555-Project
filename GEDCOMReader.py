@@ -277,6 +277,25 @@ def US10(family, individuals, printErrors=True):
         
     return True
 
+def US24(families, individuals, printErrors=True):
+    """No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file"""
+    
+    unique_families = []
+
+    for f in families:
+        for i in individuals:
+            if f.wife_id == i.id:
+                wife_name = i.name
+            if f.husband_id == i.id:
+                husband_name = i.name
+        if (husband_name, wife_name, to_date(f.married)) in unique_families:
+            if printErrors:
+                        print(f"ERROR: FAMILY: US24: {f.id}: Family with the same spouse names and marriage date")
+            return False
+        unique_families.append((husband_name, wife_name, to_date(f.married)))
+        
+    return True
+
 def US25(family, individuals, printErrors=True):
     """No more than one child with the same name and birth date should appear in a family"""
     
@@ -531,7 +550,7 @@ for fam in families:
     US05(fam, individuals)
     US06(fam, individuals)
     US08(fam, individuals)
-    US25(fam, individuals)
+    US24(families, individuals)
     check_born_before_married(fam)
     check_male_members_last_name(fam)
     US12(fam, None)
