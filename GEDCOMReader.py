@@ -372,6 +372,16 @@ def US13(family, individuals, printErrors=True):
     return True
 
 
+def was_born_in_last_30_days(individual):
+    """Check if an individual was born in the last 30 days and not in the future (satisfies US35)"""
+    if individual.birthday == "NA":
+        return False
+    birth_date = datetime.strptime(individual.birthday, '%d %b %Y')
+    thirty_days_ago = datetime.today() - timedelta(days=30)
+    today = datetime.today()
+    return thirty_days_ago <= birth_date <= today
+
+
 def calculate_age(birth_date, death_date="NA"):
     if death_date != "NA":
         birth_date_object = to_date(birth_date).date()
@@ -467,6 +477,17 @@ def create_siblings_by_age_table(families, by_id=by_id):
             for sibling in siblings:
                 siblings_by_age_table.add_row([family.id] + list(sibling))
     return siblings_by_age_table
+
+def create_born_in_last_30_days_table(individuals):
+    """Satisfies US35"""
+    recent_births = PrettyTable()
+    recent_births.field_names = ["ID", "Name", "Birthday"]
+
+    for indiv in individuals:
+        if was_born_in_last_30_days(indiv):
+            recent_births.add_row([indiv.id, indiv.name, indiv.birthday])
+
+    return recent_births
 
 
 if __name__ == '__main__':
@@ -640,4 +661,9 @@ print(create_living_and_married_individuals_table(families))
 print()
 print('List Siblings in Families by Decreasing Age')
 print(create_siblings_by_age_table(families))
+
+# Print Individuals Born in Last 30 days Table
+print()
+print('Individuals who were born in the last 30 days')
+print(create_born_in_last_30_days_table(individuals))
 
