@@ -478,7 +478,7 @@ def create_born_in_last_30_days_table(by_id=by_id):
     thirty_days_ago = today - timedelta(days=30)
 
     for individual_id, individual in by_id.items():
-        birth_date = datetime.strptime(individual.birthday, '%d %b %Y')
+        birth_date = to_date(individual.birthday)
 
         if thirty_days_ago <= birth_date <= today:
             table.add_row([individual.id, individual.name, individual.birthday])
@@ -496,7 +496,7 @@ def create_died_in_last_30_days_table(by_id=by_id):
 
     for individual_id, individual in by_id.items():
         if individual.death != "NA":
-            death_date = datetime.strptime(individual.death, '%d %b %Y')
+            death_date = to_date(individual.death)
             if thirty_days_ago <= death_date <= today:
                 table.add_row([individual.id, individual.name, individual.death])
 
