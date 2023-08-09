@@ -714,6 +714,70 @@ class TestUS28(unittest.TestCase):
             previous_age = age
 
 
+class TestUS35(unittest.TestCase):
+    """
+    Author: Michael Scoli
+    User Story: US35
+    Sprint: Sprint 4
+    """
+
+    def setUp(self):
+        today = datetime.today()
+        ten_days_ago = (today - timedelta(days=10)).strftime('%d %b %Y')
+        forty_days_ago = (today - timedelta(days=40)).strftime('%d %b %Y')
+        ten_days_later = (today + timedelta(days=10)).strftime('%d %b %Y')
+
+        self.by_id = {
+            "I01": Individual(id="I01", name="Alice Thompson", gender="F", birthday=ten_days_ago, death="NA", age=10),
+            "I02": Individual(id="I02", name="Bob Johnson", gender="M", birthday=forty_days_ago, death="NA", age=40),
+            "I03": Individual(id="I03", name="Charlie Brown", gender="M", birthday=ten_days_later, death="NA", age=-10),
+        }
+
+        self.born_in_last_30_days_table = create_born_in_last_30_days_table(self.by_id)
+
+    def test_create_born_in_last_30_days_table1(self):
+        # Retrieve the names from the rows. Assuming the 'Name' column is the second column in the table.
+        names_in_table = [list(row)[1] for row in self.born_in_last_30_days_table._rows]  # use _rows to access the rows
+        self.assertEqual(len(names_in_table), 1)
+        self.assertIn("Alice Thompson", names_in_table)
+
+
+class TestUS36(unittest.TestCase):
+    """
+    Author: Michael Scoli
+    User Story: US36
+    Sprint: Sprint 4
+    """
+
+    def setUp(self):
+        # Example individuals. Adjust these according to your data structure.
+        indiv1 = Individual(id="I01", name="Bob Smith", birthday="10 JAN 2000", death="20 JUL 2023")  # Died recently
+        indiv2 = Individual(id="I02", name="Jane Doe", birthday="5 JAN 1980",
+                            death="5 JUN 2022")  # Died over a year ago
+        indiv3 = Individual(id="I03", name="John Snow", birthday="10 JAN 1990", death="11 JUL 2023")  # Died recently
+
+        # Convert to a dictionary format for the by_id structure.
+        self.by_id = {
+            "I01": indiv1,
+            "I02": indiv2,
+            "I03": indiv3
+        }
+
+        # Create the table using the function
+        self.died_in_last_30_days_table = create_died_in_last_30_days_table(self.by_id)
+
+    def test_create_died_in_last_30_days_table(self):
+        # Retrieve the names from the rows. Assuming the 'Name' column is the second column in the table.
+        names_in_table = [list(row)[1] for row in self.died_in_last_30_days_table._rows]
+
+        # Check that there are 2 individuals in the table.
+        self.assertEqual(len(names_in_table), 2)
+
+        # Check that both Bob Smith and John Snow are in the table, but Jane Doe isn't.
+        self.assertIn("Bob Smith", names_in_table)
+        self.assertIn("John Snow", names_in_table)
+        self.assertNotIn("Jane Doe", names_in_table)
+
 
 if __name__ == '__main__':
     unittest.main()
