@@ -452,6 +452,37 @@ def create_living_and_married_individuals_table(families, by_id=by_id):
                 [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
     return living_and_married_table
 
+def create_living_over_30_and_never_married_table(indivs, families):
+    living_over_30_and_never_married_table = PrettyTable()
+    living_over_30_and_never_married_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+    married_ids = set()
+    for fam in families:
+        married_ids.add(fam.husband_id)
+        married_ids.add(fam.wife_id)
+    for indiv in indivs:
+        if indiv.alive == True and indiv.age > 30 and indiv.id not in married_ids:
+            child_field = "None" if indiv.child == "NA" else "{'%s'}" % indiv.child
+            spouse_field = "NA" if indiv.spouse == "NA" else "{'%s'}" % indiv.spouse
+            living_over_30_and_never_married_table.add_row(
+                [indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
+    return living_over_30_and_never_married_table
+
+def create_multiple_births_table(indivs, families, by_id=by_id):
+    multiple_births_table = PrettyTable()
+    multiple_births_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+    fam_ids_with_multiple_births = set()
+    for indiv in indivs:
+        filtered_indivs = list(filter(lambda person: person.birthday == indiv.birthday and person.child == indiv.child, indivs))
+        if len(filtered_indivs) > 1:
+            fam_ids_with_multiple_births.add(indiv.child)
+    for fam_id in fam_ids_with_multiple_births:
+        family = [fam for fam in families if fam.id == fam_id]
+        wife_obj = by_id[family[0].wife_id]
+        child_field = "None" if wife_obj.child == "NA" else "{'%s'}" % wife_obj.child
+        spouse_field = "NA" if wife_obj.spouse == "NA" else "{'%s'}" % wife_obj.spouse
+        multiple_births_table.add_row([wife_obj.id, wife_obj.name, wife_obj.gender, wife_obj.birthday, wife_obj.age, wife_obj.alive, wife_obj.death, child_field, spouse_field])
+    return multiple_births_table
+
 def create_siblings_by_age_table(families, by_id=by_id):
     """Satisfies US28"""
     siblings_by_age_table = PrettyTable()
@@ -640,4 +671,15 @@ print(create_living_and_married_individuals_table(families))
 print()
 print('List Siblings in Families by Decreasing Age')
 print(create_siblings_by_age_table(families))
+
+# Print Living, Over 30, and Never Married Table
+print()
+print('Living, Over 30, and Never Married')
+print(create_living_over_30_and_never_married_table(individuals, families))
+
+# Print Multiple Births Table
+print()
+print('Multiple Births Table')
+print(create_multiple_births_table(individuals, families))
+
 
