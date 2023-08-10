@@ -342,6 +342,24 @@ def create_orphaned_individuals_table(indivs):
         orphans_table.add_row([indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
     return orphans_table
 
+def find_age_differences(families, individuals):
+    age_couples = []
+
+    for f in families:
+        for i in individuals:
+            if f.wife_id == i.id:
+                wife_age = calculate_age(i.birthday, f.married)
+            if f.husband_id == i.id:
+                husband_age = calculate_age(i.birthday, f.married)
+        if wife_age/husband_age>2 or husband_age/wife_age>2:
+            age_couples.append(f)
+    
+    couples_table = PrettyTable()
+    couples_table.field_names = ["Married", "Husband ID", "Husband Name", "Wife ID", "Wife Name"]
+    for c in age_couples:
+        couples_table.add_row([c.married, c.husband_id, c.husband_name, c.wife_id, c.wife_name])
+    return couples_table
+
 def US12(family, individuals, printErrors=True):
     """Mother should be less than 60 years older than her children and
     father should be less than 80 years older than his children"""
@@ -759,3 +777,7 @@ print(create_multiple_births_table(individuals, families))
 print()
 print('Orphaned Children')
 print(find_orphans(families, individuals))
+
+print()
+print('Couples with large age differences')
+print(find_age_differences(families, individuals))
