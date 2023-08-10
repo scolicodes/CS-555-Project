@@ -42,7 +42,10 @@ class Family:
 
 
 def to_date(string: str):
-    return datetime.strptime(string, "%d %b %Y")
+    try:
+        return datetime.strptime(string, "%d %b %Y")
+    except ValueError:
+        print(f'ERROR: US42: Invalid date "{string}"')
 
 
 by_id = {}
@@ -533,6 +536,31 @@ def create_died_in_last_30_days_table(by_id=by_id):
 
     return table
 
+
+def create_survivors_in_last30days_tables(families, by_id=by_id):
+    """Satisfies US37"""
+    today = datetime.today()
+    thirty_days_ago = today - timedelta(days=30)
+    res = []
+    for family in families:
+        if family.divorced != "NA":
+            continue
+        for id in (family.wife_id, family.husband_id):
+            indi = by_id[id]
+            if indi.death != "NA" and thirty_days_ago <= to_date(indi.death) <= today:
+                survivors = [family.wife_id, family.husband_id]
+                if isinstance(family.children, list):
+                    survivors += family.children
+                survivors = [indi for indi in (by_id[id.strip("'")] for id in survivors) if indi.death == "NA"]
+                table = PrettyTable()
+                table.field_names = ["ID", "Name"]
+                table.title = f'Living spouses and children of {indi.name}'
+                for survivor in survivors:
+                    table.add_row([survivor.id, survivor.name])
+                res.append(table)
+    return res
+
+
 if __name__ == '__main__':
     file_name = input("Please enter the file name: ") or 'TestFamilyTree.ged'
 else:
@@ -724,3 +752,7 @@ print(create_living_over_30_and_never_married_table(individuals, families))
 print()
 print('Multiple Births Table')
 print(create_multiple_births_table(individuals, families))
+
+for table in create_survivors_in_last30days_tables(families):
+    print()
+    print(table)

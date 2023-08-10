@@ -893,5 +893,55 @@ class TestUS36(unittest.TestCase):
         self.assertNotIn("Jane Doe", names_in_table)
 
 
+class TestUS37(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US37
+    Sprint: Sprint 4
+    """
+
+    def setUp(self):
+        fam1 = Family(id="F1", married="12 APR 2000", divorced="NA", husband_id="I07", husband_name="Arian Maijala", wife_id="I02", wife_name="Ashlee Pinkham", children="NA")
+        fam2 = Family(id="F2", married="19 OCT 2019", divorced="NA", husband_id="I03", husband_name="Brian Heeney", wife_id="I08", wife_name="Hannah Moffitt", children=[
+            "'I02'",
+            "'I04'",
+            "'I05'",
+            "'I06'",
+            "'I07'",
+        ])
+        death_time = (date.today() - timedelta(days=2)).strftime("%d %b %Y")
+        by_id = {
+            "I01": Individual(id="I01", name="Marco Cattaneo", gender="M", birthday="19 OCT 1977", alive=True),
+            "I02": Individual(id="I02", name="Ashlee Pinkham", gender="F", birthday="10 NOV 1978", alive=True),
+            "I03": Individual(id="I03", name="Brian Heeney", gender="M", birthday="11 DEC 1998", alive=True),
+            "I04": Individual(id="I04", name="Suzzanne Biddle", gender="F", birthday="23 NOV 1998", alive=True),
+            "I05": Individual(id="I05", name="Sandra Bozic", gender="F", birthday="12 MAY 1980", alive=True),
+            "I06": Individual(id="I06", name="Robin Schremmer", gender="M", birthday="22 APR 1988", alive=True),
+            "I07": Individual(id="I07", name="Arian Maijala", gender="M", birthday="15 DEC 1922", death=death_time, alive=False),
+            "I08": Individual(id="I08", name="Hannah Moffitt", gender="F", birthday="10 FEB 1911", death=death_time, alive=False)
+        }
+        self.tables = create_survivors_in_last30days_tables([fam1, fam2], by_id)
+
+    def test_create_survivors_in_last30days_tables(self):
+        for table in self.tables:
+            print()
+            print(table)
+        self.assertEqual(len(self.tables), 2)
+        self.assertEqual(len(self.tables[0].rows), 1)
+        self.assertEqual(len(self.tables[1].rows), 5)
+
+
+class TestUS42(unittest.TestCase):
+    """
+    Author: Andrew Turcan
+    User Story: US42
+    Sprint: Sprint 4
+    """
+
+    def test_to_date(self):
+        self.assertIsNone(to_date('30 FEB 2020'))
+        self.assertIsNotNone(to_date('28 FEB 2020'))
+
+
 if __name__ == '__main__':
     unittest.main()
