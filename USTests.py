@@ -860,11 +860,15 @@ class TestUS36(unittest.TestCase):
     """
 
     def setUp(self):
+        today = datetime.today()
+        five_days_ago = (today - timedelta(days=5)).strftime('%d %b %Y')
+        twenty_nine__days_ago = (today - timedelta(days=29)).strftime('%d %b %Y')
+
         # Example individuals. Adjust these according to your data structure.
-        indiv1 = Individual(id="I01", name="Bob Smith", birthday="10 JAN 2000", death="20 JUL 2023")  # Died recently
+        indiv1 = Individual(id="I01", name="Bob Smith", birthday="10 JAN 2000", death=twenty_nine__days_ago)  # Died 29 days ago
         indiv2 = Individual(id="I02", name="Jane Doe", birthday="5 JAN 1980",
                             death="5 JUN 2022")  # Died over a year ago
-        indiv3 = Individual(id="I03", name="John Snow", birthday="10 JAN 1990", death="11 JUL 2023")  # Died recently
+        indiv3 = Individual(id="I03", name="John Snow", birthday="10 JAN 1990", death=five_days_ago) # Died 5 days ago
 
         # Convert to a dictionary format for the by_id structure.
         self.by_id = {
