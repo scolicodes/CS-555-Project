@@ -625,6 +625,116 @@ class TestUS30(unittest.TestCase):
     def test_create_living_and_married_table5(self):
         self.assertEqual(len(self.living_and_married_table5.rows), 0)
 
+class TestUS31(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US31
+    Sprint: Sprint 4
+    """
+
+    def setUp(self):
+        fams = [
+            Family(id="F1", married="12 APR 2000", divorced="NA", husband_id="I01", husband_name="Kenny Kincaide", wife_id="I02", wife_name="Catrina Belmontes"),
+            Family(id="F2", married="01 FEB 2015", divorced="19 MAR 2020", husband_id="I03", husband_name="Felix Trimpe", wife_id="I04", wife_name="Abby Polhamus")
+        ]
+        indiv1 = Individual(id="I01", name="Kenny Kincaide", gender="M", birthday="11 MAY 1975", age=48, alive=True)
+        indiv2 = Individual(id="I02", name="Catrina Belmontes", gender="F", birthday="22 DEC 1975", age=47, alive=True)
+        indiv3 = Individual(id="I03", name="Felix Trimpe", gender="M", birthday="02 JUN 1985", age=38, alive=True)
+        indiv4 = Individual(id="I04", name="Abby Polhamus", gender="F", birthday="21 JUL 1985", age=38, alive=True)
+        indiv5 = Individual(id="I05", name="Anne Gerde", gender="F", birthday="22 MAY 1980", age=43, alive=True)
+        indiv6 = Individual(id="I06", name="Alex Mulcare", gender="M", birthday="11 JUN 1960", death="10 NOV 2021", age=61, alive=False)
+        indiv7 = Individual(id="I07", name="Samuel Hizer", gender="M", birthday="02 APR 1922", death="10 FEB 1999", age=77, alive=False)
+        indiv8 = Individual(id="I08", name="Debora Seligmann", gender="F", birthday="10 FEB 2001", age=22, alive=True)
+        indiv9 = Individual(id="I09", name="Karly Stonehill", gender="F", birthday="01 AUG 1990", age=33, alive=True)
+        indiv10 = Individual(id="I10", name="Dominic Coman", gender="M", birthday="11 JUL 19", age=39, alive=True)    
+    
+        self.living_over_30_and_never_married_table1 = create_living_over_30_and_never_married_table([indiv1, indiv2, indiv3, indiv4, indiv5, indiv6], fams) # 1 living, over 30, and never married individual
+        self.living_over_30_and_never_married_table2 = create_living_over_30_and_never_married_table([indiv1, indiv2, indiv3, indiv4, indiv5, indiv6, indiv7, indiv8], fams) # 1 living, over 30, and never married individual
+        self.living_over_30_and_never_married_table3 = create_living_over_30_and_never_married_table([indiv1, indiv2, indiv3, indiv4, indiv5, indiv6, indiv7, indiv8, indiv10], fams) # 2 living, over 30, and never married individuals
+        self.living_over_30_and_never_married_table4 = create_living_over_30_and_never_married_table([indiv1, indiv2, indiv3, indiv4, indiv5, indiv6, indiv7, indiv8, indiv9, indiv10], fams) # 3 living, over 30, and never married individuals
+        self.living_over_30_and_never_married_table5 = create_living_over_30_and_never_married_table([indiv1, indiv2, indiv3, indiv4], fams) # 0 living, over 30, and never married individuals
+
+    def test_create_living_and_married_table1(self):
+        self.assertEqual(len(self.living_over_30_and_never_married_table1.rows), 1)
+
+    def test_create_living_and_married_table2(self):
+        self.assertEqual(len(self.living_over_30_and_never_married_table2.rows), 1)
+
+    def test_create_living_and_married_table3(self):
+        self.assertEqual(len(self.living_over_30_and_never_married_table3.rows), 2)
+
+    def test_create_living_and_married_table4(self):
+        self.assertEqual(len(self.living_over_30_and_never_married_table4.rows), 3)
+
+    def test_create_living_and_married_table5(self):
+        self.assertEqual(len(self.living_over_30_and_never_married_table5.rows), 0)
+
+class TestUS32(unittest.TestCase):
+    """
+    Author: Ronnie Arvanites
+    User Story: US32
+    Sprint: Sprint 4
+    """
+
+    def setUp(self):
+        fam1 = Family(id="F1", married="12 APR 1996", divorced="NA", husband_id="I01", husband_name="Gilbert Glossner", wife_id="I02", wife_name="Emely Braunagel", children=["I03", "I04"])
+        fam2 = Family(id="F2", married="10 MAR 2015", husband_id="I06", husband_name="Wilmar Staller", wife_id="I05", wife_name="Alannah Nolan", children=["I07", "I08", "I09"])
+        fam3 = Family(id="F3", married="13 SEP 2010", husband_id="I10", husband_name="Felix Trimpe", wife_id="I11", wife_name="Abby Polhamus", children=["I12", "I13", "I14"])
+        #Fam1
+        indiv1 = Individual(id="I01", name="Gilbert Glossner", gender="M", birthday="08 JUN 1970", spouse="F1")
+        indiv2 = Individual(id="I02", name="Emely Braunagel", gender="F", birthday="23 JAN 1970", spouse="F1")  
+        indiv3 = Individual(id="I03", name="David Glossner", gender="M", birthday="11 APR 1998", child="F1")
+        indiv4 = Individual(id="I04", name="Melonie Glossner", gender="F", birthday="05 SEP 1999", child="F1")
+        #Fam2
+        indiv5 = Individual(id="I05", name="Alannah Nolan", gender="F", birthday="12 FEB 1989", spouse="F2")
+        indiv6 = Individual(id="I06", name="Wilmar Staller", gender="M", birthday="13 JUL 1990", spouse="F2")
+        indiv7 = Individual(id="I07", name="Franco Staller", gender="M", birthday="20 MAY 2012", child="F2")
+        indiv8 = Individual(id="I08", name="Eva Staller", gender="F", birthday="20 MAY 2012", child="F2")
+        indiv9 = Individual(id="I09", name="Ellen Staller", gender="F", birthday="02 FEB 2014", child="F2")
+        #Fam3
+        indiv10 = Individual(id="I10", name="Alonzo Zeolla", gender="M", birthday="11 JUL 1982", spouse="F3")
+        indiv11 = Individual(id="I11", name="Alessia Hadwin", gender="F", birthday="03 AUG 1982", spouse="F3")
+        indiv12 = Individual(id="I12", name="Daylan Zeolla", gender="M", birthday="10 NOV 2012", child="F3")
+        indiv13 = Individual(id="I13", name="Wanda Zeolla", gender="F", birthday="10 NOV 2012", child="F3")
+        indiv14 = Individual(id="I14", name="Aurora Zeolla", gender="F", birthday="10 NOV 2012", child="F3")
+        by_id = {
+            "I01": indiv1,
+            "I02": indiv2,
+            "I03": indiv3,
+            "I04": indiv4,
+            "I05": indiv5,
+            "I06": indiv6,
+            "I07": indiv7,
+            "I08": indiv8,
+            "I09": indiv9,
+            "I10": indiv10,
+            "I11": indiv11,
+            "I12": indiv12,
+            "I13": indiv13,
+            "I14": indiv14
+        }
+
+        self.multiple_births_table1 = create_multiple_births_table([indiv1, indiv2, indiv3, indiv4, indiv5, indiv6, indiv7, indiv8, indiv9],[fam1, fam2], by_id) # 1 multiple birth individual
+        self.multiple_births_table2 = create_multiple_births_table([indiv5, indiv6, indiv7, indiv8, indiv9, indiv10, indiv11, indiv12, indiv13, indiv14],[fam2, fam3], by_id) # 2 multiple birth individuals
+        self.multiple_births_table3 = create_multiple_births_table([indiv1, indiv2, indiv3, indiv4, indiv5, indiv6, indiv7, indiv8, indiv9, indiv10, indiv11, indiv12, indiv13, indiv14],[fam1, fam2, fam3], by_id) # 2 multiple birth individuals
+        self.multiple_births_table4 = create_multiple_births_table([indiv10, indiv11, indiv12, indiv13, indiv14],[fam3], by_id) # 1 multiple birth individual
+        self.multiple_births_table5 = create_multiple_births_table([indiv1, indiv2, indiv3, indiv4],[fam1], by_id) # 0 multiple birth individuals
+
+    def test_create_living_and_married_table1(self):
+        self.assertEqual(len(self.multiple_births_table1.rows), 1)
+
+    def test_create_living_and_married_table2(self):
+        self.assertEqual(len(self.multiple_births_table2.rows), 2)
+
+    def test_create_living_and_married_table3(self):
+        self.assertEqual(len(self.multiple_births_table3.rows), 2)
+
+    def test_create_living_and_married_table4(self):
+        self.assertEqual(len(self.multiple_births_table4.rows), 1)
+
+    def test_create_living_and_married_table5(self):
+        self.assertEqual(len(self.multiple_births_table5.rows), 0)
+
 class TestUS13(unittest.TestCase):
     """
     Author: Michael Scoli
