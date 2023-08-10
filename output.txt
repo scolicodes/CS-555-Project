@@ -774,6 +774,18 @@ List Siblings in Families by Decreasing Age
 |    @F8@   |   @I24@    | Payton /Fowler/  |  -2 |
 +-----------+------------+------------------+-----+
 
+Individuals who were born in the last 30 days
++----+------+----------+
+| ID | Name | Birthday |
++----+------+----------+
++----+------+----------+
+
+Individuals who died in the last 30 days
++----+------+------------+
+| ID | Name | Death Date |
++----+------+------------+
++----+------+------------+
+
 Living, Over 30, and Never Married
 +-------+------------------+--------+-------------+-----+-------+-------+----------+--------+
 |   ID  |       Name       | Gender |   Birthday  | Age | Alive | Death |  Child   | Spouse |

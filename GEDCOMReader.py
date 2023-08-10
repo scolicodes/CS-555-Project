@@ -500,6 +500,39 @@ def create_siblings_by_age_table(families, by_id=by_id):
     return siblings_by_age_table
 
 
+def create_born_in_last_30_days_table(by_id=by_id):
+    """Satisfies US35"""
+    table = PrettyTable()
+    table.field_names = ["ID", "Name", "Birthday"]
+
+    today = datetime.today()
+    thirty_days_ago = today - timedelta(days=30)
+
+    for individual_id, individual in by_id.items():
+        birth_date = to_date(individual.birthday)
+
+        if thirty_days_ago <= birth_date <= today:
+            table.add_row([individual.id, individual.name, individual.birthday])
+
+    return table
+
+
+def create_died_in_last_30_days_table(by_id=by_id):
+    """Satisfies US36"""
+    table = PrettyTable()
+    table.field_names = ["ID", "Name", "Death Date"]
+
+    today = datetime.today()
+    thirty_days_ago = today - timedelta(days=30)
+
+    for individual_id, individual in by_id.items():
+        if individual.death != "NA":
+            death_date = to_date(individual.death)
+            if thirty_days_ago <= death_date <= today:
+                table.add_row([individual.id, individual.name, individual.death])
+
+    return table
+
 if __name__ == '__main__':
     file_name = input("Please enter the file name: ") or 'TestFamilyTree.ged'
 else:
@@ -672,6 +705,16 @@ print()
 print('List Siblings in Families by Decreasing Age')
 print(create_siblings_by_age_table(families))
 
+# Print Individuals Born in Last 30 Days Table
+print()
+print('Individuals who were born in the last 30 days')
+print(create_born_in_last_30_days_table())
+
+# Print Individuals Who Died in Last 30 Days Table
+print()
+print('Individuals who died in the last 30 days')
+print(create_died_in_last_30_days_table())
+
 # Print Living, Over 30, and Never Married Table
 print()
 print('Living, Over 30, and Never Married')
@@ -681,5 +724,3 @@ print(create_living_over_30_and_never_married_table(individuals, families))
 print()
 print('Multiple Births Table')
 print(create_multiple_births_table(individuals, families))
-
-
