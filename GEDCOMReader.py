@@ -315,6 +315,54 @@ def US25(family, individuals, printErrors=True):
         
     return True
 
+def find_orphans(families, individuals):
+    """List all orphaned children (both parents dead and child < 18)"""
+    orphaned_children = []
+    wife_death = False
+    husband_death = False
+    for f in families:
+        for i in individuals:
+            if f.wife_id == i.id:
+                wife_death = i.death != "NA"
+            if f.husband_id == i.id:
+                husband_death = i.death != "NA"
+        if wife_death and husband_death:
+            for c in f.children:
+                for i in individuals:
+                    c = c.strip('\'')
+                    if c == i.id:
+                        if calculate_age(i.birthday, "NA") < 18:
+                            orphaned_children.append(i)
+
+    return create_orphaned_individuals_table(orphaned_children)
+
+def create_orphaned_individuals_table(indivs):
+    orphans_table = PrettyTable()
+    orphans_table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+    for indiv in indivs:
+        child_field = "None" if indiv.child == "NA" else "{'%s'}" % indiv.child
+        spouse_field = "NA" if indiv.spouse == "NA" else "{'%s'}" % indiv.spouse
+        orphans_table.add_row([indiv.id, indiv.name, indiv.gender, indiv.birthday, indiv.age, indiv.alive, indiv.death, child_field, spouse_field])
+    return orphans_table
+
+def find_age_differences(families, individuals):
+    age_couples = []
+
+    for f in families:
+        for i in individuals:
+            if f.wife_id == i.id:
+                wife_age = calculate_age(i.birthday, f.married)
+            if f.husband_id == i.id:
+                husband_age = calculate_age(i.birthday, f.married)
+        if wife_age/husband_age>2 or husband_age/wife_age>2:
+            age_couples.append(f)
+    
+    couples_table = PrettyTable()
+    couples_table.field_names = ["Married", "Husband ID", "Husband Name", "Wife ID", "Wife Name"]
+    for c in age_couples:
+        couples_table.add_row([c.married, c.husband_id, c.husband_name, c.wife_id, c.wife_name])
+    return couples_table
+
 def US12(family, individuals, printErrors=True):
     """Mother should be less than 60 years older than her children and
     father should be less than 80 years older than his children"""
@@ -753,6 +801,17 @@ print()
 print('Multiple Births Table')
 print(create_multiple_births_table(individuals, families))
 
+
+# Print Orphaned Children Table
+print()
+print('Orphaned Children')
+print(find_orphans(families, individuals))
+
+print()
+print('Couples with large age differences')
+print(find_age_differences(families, individuals))
+
+# Print survivor tables
 for table in create_survivors_in_last30days_tables(families):
     print()
     print(table)
