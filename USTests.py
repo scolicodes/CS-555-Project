@@ -332,6 +332,41 @@ class TestUS25(unittest.TestCase):
         self.assertFalse(US25(self.family4, [self.individual1, self.individual2, self.individual3, self.individual4, self.individual5, self.individual6], False))
         self.assertTrue(US25(self.family5, [self.individual1, self.individual2, self.individual3, self.individual4, self.individual7, self.individual8], False))
 
+class TestUS33(unittest.TestCase):
+    """
+    Author: Zac Schuh
+    User Story: US33
+    Sprint: Sprint 4
+    """
+
+    def setUp(self):
+        self.family1 = Family("F1", "15 JUN 1995", "NA", "I1", "John Smith", "I2", "Jane Smith")  # Never had a child
+        self.family2 = Family("F2", "15 JUN 1995", "NA", "I8", "John Evans", "I9", "Jane Evans", ["I3"])  # Child under 18, but one parent alive
+        self.family3 = Family("F3", "15 JUN 1995", "NA", "I10", "John Lane", "I5", "Maggie Lane", ["I11", "I4"])  # One child under 18, one child over 18, parents dead
+        self.family4 = Family("F4", "15 JUN 1995", "NA", "I6", "James Smith", "I13", "Jane Smith", ["I12"])  # One child but both parents alive
+        self.family5 = Family("F5", "15 JUN 1995", "NA", "I14", "John Doe", "I15", "Maggie Smith", ["I16", "I17"])  # Two children orphaned
+        self.indiv2 = Individual(id="I2", name="Jane Smith", gender="F", birthday="01 JAN 1970", death="NA")
+        self.indiv1 = Individual(id="I1", name="John Smith", gender="M", birthday="01 JAN 1960", death="01 JAN 2020")
+        self.indiv3 = Individual(id="I3", name="Jack Smith", gender="M", birthday="01 JAN 2006", death="NA")
+        self.indiv4 = Individual(id="I4", name="Jill Smith", gender="F", birthday="03 MAR 2003", death="NA")
+        self.indiv5 = Individual(id="I5", name="Maggie Lane", gender="M", birthday="10 JUN 1970", death="02 JAN 2020")
+        self.indiv6 = Individual(id="I6", name="James Waters", gender="M", birthday="10 JUN 1971", death="NA")
+        self.indiv7 = Individual(id="I7", name="Elizabeth Smith", gender="F", birthday="5 DEC 2007", death="NA")
+        self.indiv8 = Individual(id="I8", name="John Evans", gender="M", birthday="01 JAN 1960", death="01 JAN 2020")
+        self.indiv9 = Individual(id="I9", name="Jane Evans", gender="F", birthday="01 JAN 1970", death="NA")
+        self.indiv10 = Individual(id="I10", name="John Lane", gender="M", birthday="01 JAN 1960", death="01 JAN 2020")
+        self.indiv11 = Individual(id="I11", name="Jack Lane", gender="M", birthday="01 JAN 2006", death="NA")
+        self.indiv12 = Individual(id="I12", name="Elizabeth Waters", gender="F", birthday="5 DEC 2007", death="NA")
+        self.indiv13 = Individual(id="I13", name="Jane Waters", gender="F", birthday="01 JAN 1970", death="NA")
+        self.indiv14 = Individual(id="I14", name="John Doe", gender="M", birthday="01 JAN 1960", death="01 JAN 2020")
+        self.indiv15 = Individual(id="I15", name="Maggie Doe", gender="M", birthday="10 JUN 1970", death="02 JAN 2020")
+        self.indiv16 = Individual(id="I16", name="Jack Doe", gender="M", birthday="01 JAN 2006", death="NA")
+        self.indiv17 = Individual(id="I17", name="Elizabeth Doe", gender="F", birthday="5 DEC 2007", death="NA")
+
+    def test_orphans(self):
+        self.orphan_table = find_orphans(
+            [self.family1, self.family2, self.family3, self.family4, self.family5], [self.indiv1, self.indiv2, self.indiv3, self.indiv4, self.indiv5, self.indiv6, self.indiv7, self.indiv8, self.indiv9, self.indiv10, self.indiv11, self.indiv12, self.indiv13, self.indiv14, self.indiv15, self.indiv16, self.indiv17])
+        self.assertEqual(len(self.orphan_table.rows), 3)
 
 class TestUS14(unittest.TestCase):
     """
