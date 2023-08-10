@@ -704,7 +704,7 @@ Individuals
 | @I17@ |   Evan /Fowler/   |   M    | 27 MAY 1982 |  41 |  True |      NA     | {'@F3@'} |    NA    |
 | @I18@ |   Allison /Gill/  |   F    |  5 NOV 1949 |  73 |  True |      NA     |   None   | {'@F5@'} |
 | @I19@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |      NA     | {'@F5@'} | {'@F8@'} |
-| @I20@ |  William /Fowler/ |   M    | 10 AUG 1980 |  42 |  True |      NA     | {'@F5@'} |    NA    |
+| @I20@ |  William /Fowler/ |   M    | 10 AUG 1980 |  43 |  True |      NA     | {'@F5@'} |    NA    |
 | @I21@ |  Lindsey /Fowler/ |   F    |  8 OCT 1981 |  41 |  True |      NA     | {'@F5@'} |    NA    |
 | @I22@ |  Harley /Turner/  |   F    | 14 SEP 1977 |  45 |  True |      NA     |   None   | {'@F8@'} |
 | @I23@ |   Steve /Fowler/  |   M    |  7 MAY 1999 |  24 |  True |      NA     | {'@F8@'} |    NA    |
@@ -741,15 +741,15 @@ Living and Married Individuals
 +-------+-------------------+--------+-------------+-----+-------+-------+----------+----------+
 |   ID  |        Name       | Gender |   Birthday  | Age | Alive | Death |  Child   |  Spouse  |
 +-------+-------------------+--------+-------------+-----+-------+-------+----------+----------+
-|  @I9@ |  Carly /Collins/  |   F    | 16 SEP 1975 |  47 |  True |   NA  | {'@F2@'} | {'@F7@'} |
-| @I16@ | Ellen /Valentine/ |   F    |  8 MAY 1951 |  72 |  True |   NA  |   None   | {'@F3@'} |
-| @I19@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |   NA  | {'@F5@'} | {'@F8@'} |
-| @I22@ |  Harley /Turner/  |   F    | 14 SEP 1977 |  45 |  True |   NA  |   None   | {'@F8@'} |
-|  @I4@ |   Mason /Fowler/  |   M    | 15 DEC 1947 |  75 |  True |   NA  | {'@F1@'} | {'@F4@'} |
 |  @I5@ |  Marvin /Kelley/  |   M    | 10 SEP 1949 |  73 |  True |   NA  | {'@F1@'} | {'@F5@'} |
-| @I18@ |   Allison /Gill/  |   F    |  5 NOV 1949 |  73 |  True |   NA  |   None   | {'@F5@'} |
 | @I10@ |  Garret /Mullins/ |   M    | 13 NOV 1977 |  45 |  True |   NA  |   None   | {'@F7@'} |
 |  @I3@ |  Ashley /Fowler/  |   M    | 12 NOV 1870 | 152 |  True |   NA  | {'@F1@'} | {'@F2@'} |
+|  @I9@ |  Carly /Collins/  |   F    | 16 SEP 1975 |  47 |  True |   NA  | {'@F2@'} | {'@F7@'} |
+| @I19@ |   Pete /Fowler/   |   M    |  8 NOV 1977 |  45 |  True |   NA  | {'@F5@'} | {'@F8@'} |
+| @I22@ |  Harley /Turner/  |   F    | 14 SEP 1977 |  45 |  True |   NA  |   None   | {'@F8@'} |
+| @I18@ |   Allison /Gill/  |   F    |  5 NOV 1949 |  73 |  True |   NA  |   None   | {'@F5@'} |
+|  @I4@ |   Mason /Fowler/  |   M    | 15 DEC 1947 |  75 |  True |   NA  | {'@F1@'} | {'@F4@'} |
+| @I16@ | Ellen /Valentine/ |   F    |  8 MAY 1951 |  72 |  True |   NA  |   None   | {'@F3@'} |
 +-------+-------------------+--------+-------------+-----+-------+-------+----------+----------+
 
 List Siblings in Families by Decreasing Age
@@ -766,7 +766,7 @@ List Siblings in Families by Decreasing Age
 |    @F4@   |   @I14@    |  Stacy /Fowler/  |  53 |
 |    @F4@   |   @I15@    |  Nick /Fowler/   |  53 |
 |    @F5@   |   @I19@    |  Pete /Fowler/   |  45 |
-|    @F5@   |   @I20@    | William /Fowler/ |  42 |
+|    @F5@   |   @I20@    | William /Fowler/ |  43 |
 |    @F5@   |   @I21@    | Lindsey /Fowler/ |  41 |
 |    @F7@   |   @I11@    | Casey /Mullins/  |  17 |
 |    @F7@   |   @I12@    | Stacy /Mullins/  |  17 |
@@ -794,7 +794,7 @@ Living, Over 30, and Never Married
 | @I14@ |  Stacy /Fowler/  |   F    | 22 OCT 1969 |  53 |  True |   NA  | {'@F4@'} |   NA   |
 | @I15@ |  Nick /Fowler/   |   M    | 16 JUN 1970 |  53 |  True |   NA  | {'@F4@'} |   NA   |
 | @I17@ |  Evan /Fowler/   |   M    | 27 MAY 1982 |  41 |  True |   NA  | {'@F3@'} |   NA   |
-| @I20@ | William /Fowler/ |   M    | 10 AUG 1980 |  42 |  True |   NA  | {'@F5@'} |   NA   |
+| @I20@ | William /Fowler/ |   M    | 10 AUG 1980 |  43 |  True |   NA  | {'@F5@'} |   NA   |
 | @I21@ | Lindsey /Fowler/ |   F    |  8 OCT 1981 |  41 |  True |   NA  | {'@F5@'} |   NA   |
 +-------+------------------+--------+-------------+-----+-------+-------+----------+--------+
 
@@ -804,3 +804,16 @@ Multiple Births Table
 +------+---------------+--------+------------+-----+-------+-------------+-------+----------+
 | @I2@ | Sidney /Keys/ |   F    | 7 MAR 1940 |  70 | False | 29 APR 2010 |  None | {'@F1@'} |
 +------+---------------+--------+------------+-----+-------+-------------+-------+----------+
+
+Orphaned Children
++----+------+--------+----------+-----+-------+-------+-------+--------+
+| ID | Name | Gender | Birthday | Age | Alive | Death | Child | Spouse |
++----+------+--------+----------+-----+-------+-------+-------+--------+
++----+------+--------+----------+-----+-------+-------+-------+--------+
+
+Couples with large age differences
++-------------+------------+----------------+---------+-----------------+
+|   Married   | Husband ID |  Husband Name  | Wife ID |    Wife Name    |
++-------------+------------+----------------+---------+-----------------+
+| 15 JUL 1967 |    @I7@    | Troy /Collins/ |   @I3@  | Ashley /Fowler/ |
++-------------+------------+----------------+---------+-----------------+
